@@ -6,6 +6,7 @@
     },
     "nav": {
       "overview": "대시보드",
+      "inbox": "민원함",
       "analytics": "분석",
       "customers": "고객",
       "billing": "결제",
@@ -124,5 +125,70 @@
     "cancel": "취소",
     "processing": "처리중...",
     "confirmChange": "변경 확정"
+  },
+  "InboxPage": {
+    "title": "민원함",
+    "description": "접수된 민원을 확인하고 처리하세요.",
+    "filters": {
+      "searchPlaceholder": "민원인명, 내용, 카테고리로 검색...",
+      "status": {
+        "placeholder": "상태",
+        "all": "전체",
+        "new": "신규",
+        "classified": "분류완료",
+        "inProgress": "처리중",
+        "replied": "답변완료",
+        "closed": "종료"
+      },
+      "priority": {
+        "placeholder": "우선순위",
+        "all": "전체",
+        "low": "낮음",
+        "normal": "보통",
+        "high": "높음",
+        "urgent": "긴급"
+      },
+      "moreFilters": "추가 필터",
+      "additionalFilters": "추가 필터 옵션",
+      "additionalFiltersDescription": "더 세부적인 검색 조건을 설정하세요.",
+      "slaApproaching": "SLA 임박 (24시간 이내)",
+      "clearFilters": "필터 초기화"
+    },
+    "ticketList": {
+      "title": "민원 목록",
+      "totalCount": "총 {count}건",
+      "error": "민원 목록을 불러오는 중 오류가 발생했습니다",
+      "empty": {
+        "title": "민원이 없습니다",
+        "description": "현재 조건에 맞는 민원이 없습니다."
+      },
+      "columns": {
+        "id": "ID",
+        "citizen": "민원인",
+        "content": "내용",
+        "category": "카테고리",
+        "status": "상태",
+        "priority": "우선순위",
+        "assignee": "담당자",
+        "sla": "SLA",
+        "created": "접수일",
+        "updates": "업데이트"
+      },
+      "unassigned": "미배정",
+      "loadMore": "더 보기"
+    },
+    "status": {
+      "new": "신규",
+      "classified": "분류완료",
+      "inProgress": "처리중",
+      "replied": "답변완료",
+      "closed": "종료"
+    },
+    "priority": {
+      "low": "낮음",
+      "normal": "보통",
+      "high": "높음",
+      "urgent": "긴급"
+    }
   }
 }

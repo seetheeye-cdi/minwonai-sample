@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { prisma, TicketStatus, TicketPriority, TicketUpdateType } from "@myapp/prisma";
+import { prisma, TicketStatus, TicketPriority } from "@myapp/prisma";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { cuid2 } from "@myapp/utils";
 

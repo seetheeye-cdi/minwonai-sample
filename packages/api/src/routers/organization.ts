@@ -184,7 +184,7 @@ export const organizationRouter = createTRPCRouter({
       weekTickets,
       openTickets,
       repliedTickets,
-      avgResponseTime,
+      _,
       satisfactionStats,
     ] = await Promise.all([
       // Total tickets
@@ -224,17 +224,8 @@ export const organizationRouter = createTRPCRouter({
         },
       }),
       
-      // Average response time (in hours)
-      prisma.ticket.aggregate({
-        where: {
-          organizationId: ctx.organizationId,
-          repliedAt: { not: null },
-        },
-        _avg: {
-          // This will be calculated in the query result
-          id: true, // Placeholder, we'll calculate manually
-        },
-      }),
+      // We'll calculate average response time manually
+      null,
       
       // Satisfaction statistics
       prisma.satisfactionSurvey.aggregate({

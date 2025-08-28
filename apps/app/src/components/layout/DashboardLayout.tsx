@@ -22,6 +22,7 @@ import { Input } from "@myapp/ui/components/input";
 import { Separator } from "@myapp/ui/components/separator";
 import {
   Home,
+  Inbox,
   BarChart3,
   Users,
   CreditCard,
@@ -42,6 +43,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
     href: string;
   }> = [
     { label: tLayout("nav.overview"), icon: Home, href: "/" },
+    { label: tLayout("nav.inbox"), icon: Inbox, href: "/inbox" },
     { label: tLayout("nav.analytics"), icon: BarChart3, href: "#" },
     { label: tLayout("nav.customers"), icon: Users, href: "#" },
     { label: tLayout("nav.billing"), icon: CreditCard, href: "/subscription" },
@@ -54,8 +56,8 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       <Sidebar>
         <SidebarHeader>
           <div className="px-2 py-1.5">
-            <div className="text-sm font-semibold">MyApp</div>
-            <div className="text-xs text-muted-foreground">SaaS Dashboard</div>
+            <div className="text-sm font-semibold">CivicAid</div>
+            <div className="text-xs text-muted-foreground">민원 처리 시스템</div>
           </div>
         </SidebarHeader>
         <SidebarContent>

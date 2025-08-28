@@ -6,6 +6,7 @@
     },
     "nav": {
       "overview": "Overview",
+      "inbox": "Inbox",
       "analytics": "Analytics",
       "customers": "Customers",
       "billing": "Billing",
@@ -124,5 +125,70 @@
     "cancel": "Cancel",
     "processing": "Processing...",
     "confirmChange": "Confirm Change"
+  },
+  "InboxPage": {
+    "title": "Inbox",
+    "description": "View and manage incoming citizen complaints.",
+    "filters": {
+      "searchPlaceholder": "Search by citizen name, content, category...",
+      "status": {
+        "placeholder": "Status",
+        "all": "All",
+        "new": "New",
+        "classified": "Classified",
+        "inProgress": "In Progress",
+        "replied": "Replied",
+        "closed": "Closed"
+      },
+      "priority": {
+        "placeholder": "Priority",
+        "all": "All",
+        "low": "Low",
+        "normal": "Normal",
+        "high": "High",
+        "urgent": "Urgent"
+      },
+      "moreFilters": "More Filters",
+      "additionalFilters": "Additional Filter Options",
+      "additionalFiltersDescription": "Set more detailed search conditions.",
+      "slaApproaching": "SLA Approaching (within 24 hours)",
+      "clearFilters": "Clear Filters"
+    },
+    "ticketList": {
+      "title": "Complaint List",
+      "totalCount": "Total {count} items",
+      "error": "An error occurred while loading the complaint list",
+      "empty": {
+        "title": "No complaints",
+        "description": "There are no complaints matching the current criteria."
+      },
+      "columns": {
+        "id": "ID",
+        "citizen": "Citizen",
+        "content": "Content",
+        "category": "Category",
+        "status": "Status",
+        "priority": "Priority",
+        "assignee": "Assignee",
+        "sla": "SLA",
+        "created": "Created",
+        "updates": "Updates"
+      },
+      "unassigned": "Unassigned",
+      "loadMore": "Load More"
+    },
+    "status": {
+      "new": "New",
+      "classified": "Classified",
+      "inProgress": "In Progress",
+      "replied": "Replied",
+      "closed": "Closed"
+    },
+    "priority": {
+      "low": "Low",
+      "normal": "Normal",
+      "high": "High",
+      "urgent": "Urgent"
+    }
   }
 }
