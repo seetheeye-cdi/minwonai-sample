@@ -107,6 +107,9 @@ const isAuthed = t.middleware(async ({ ctx, next }) => {
     where: {
       clerkId: ctx.auth.userId,
     },
+    include: {
+      organization: true,
+    },
   });
 
   if (!user) {
@@ -116,11 +119,15 @@ const isAuthed = t.middleware(async ({ ctx, next }) => {
     });
   }
 
+  // Extract organization ID from Clerk if user doesn't have one in DB
+  const organizationId = user.organizationId || ctx.auth.orgId || null;
+
   return next({
     ctx: {
       ...ctx,
       auth: ctx.auth,
       user,
+      organizationId,
     },
   });
 });

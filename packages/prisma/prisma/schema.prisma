@@ -25,12 +25,19 @@ model User {
   clerkId  String  @unique
   email    String  @unique
   username String?
+  
+  // Organization relationship
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  role           UserRole      @default(MEMBER)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
   subscription     Subscription?
   paymentHistories PaymentHistory[]
+  assignedTickets  Ticket[]        @relation("AssignedAgent")
+  ticketUpdates    TicketUpdate[]
 }
 
 enum SubscriptionStatus {
@@ -39,6 +46,40 @@ enum SubscriptionStatus {
   EXPIRED
   UNPAID
   PAST_DUE
+}
+
+// User roles within organization
+enum UserRole {
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+// Ticket status enum
+enum TicketStatus {
+  NEW
+  CLASSIFIED
+  IN_PROGRESS
+  REPLIED
+  CLOSED
+}
+
+// Ticket priority enum
+enum TicketPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+// Ticket update type enum
+enum TicketUpdateType {
+  STATUS_CHANGE
+  COMMENT
+  REPLY_SENT
+  ASSIGNMENT_CHANGE
+  PRIORITY_CHANGE
+  CATEGORY_CHANGE
 }
 
 enum SubscriptionPaymentMethod {
@@ -167,4 +208,115 @@ model PaymentHistory {
   @@index([subscriptionId])
   @@index([status])
   @@index([createdAt])
+}
+
+// Organization model for multi-tenancy
+model Organization {
+  id          String   @id @default(cuid())
+  clerkOrgId  String   @unique // Clerk organization ID
+  name        String
+  slug        String   @unique
+  description String?
+  
+  // Organization settings
+  settings    Json?    @default("{}") // JSON for flexible settings
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+  
+  users       User[]
+  tickets     Ticket[]
+}
+
+// Main ticket model
+model Ticket {
+  id             String          @id @default(cuid())
+  organizationId String
+  organization   Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  // Citizen information
+  citizenName    String
+  citizenPhone   String?
+  citizenEmail   String?
+  citizenAddress String?
+  
+  // Ticket content
+  content        String          @db.Text
+  category       String?
+  sentiment      String?         // AI analyzed sentiment
+  
+  // Status and priority
+  status         TicketStatus    @default(NEW)
+  priority       TicketPriority  @default(NORMAL)
+  
+  // Assignment
+  assignedToId   String?
+  assignedTo     User?           @relation("AssignedAgent", fields: [assignedToId], references: [id])
+  
+  // Public access token for citizen timeline
+  publicToken    String          @unique @default(uuid())
+  
+  // SLA tracking
+  slaDueAt       DateTime?
+  repliedAt      DateTime?
+  closedAt       DateTime?
+  
+  // AI suggestions
+  aiSuggestedCategory    String?
+  aiSuggestedResponse    String?         @db.Text
+  aiSuggestedAssigneeId  String?
+  aiConfidenceScore      Float?
+  
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @default(now()) @updatedAt
+  
+  updates        TicketUpdate[]
+  survey         SatisfactionSurvey?
+  
+  @@index([organizationId, status])
+  @@index([assignedToId, status])
+  @@index([publicToken])
+  @@index([createdAt])
+  @@index([priority, status])
+}
+
+// Ticket update/activity log
+model TicketUpdate {
+  id         String            @id @default(cuid())
+  ticketId   String
+  ticket     Ticket            @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  
+  userId     String?           // null for system updates
+  user       User?             @relation(fields: [userId], references: [id])
+  
+  updateType TicketUpdateType
+  content    Json              // Flexible JSON for different update types
+  
+  // For reply updates
+  replyText  String?           @db.Text
+  
+  createdAt  DateTime          @default(now())
+  
+  @@index([ticketId, createdAt])
+  @@index([updateType])
+}
+
+// Satisfaction survey model
+model SatisfactionSurvey {
+  id          String    @id @default(cuid())
+  ticketId    String    @unique
+  ticket      Ticket    @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  
+  rating      Int       // 1-5 scale
+  feedback    String?   @db.Text
+  
+  // Survey metadata
+  sentAt      DateTime  @default(now())
+  submittedAt DateTime?
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
+  
+  @@index([rating])
+  @@index([submittedAt])
 }

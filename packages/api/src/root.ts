@@ -1,10 +1,14 @@
 import { subscriptionRouter } from "./routers/subscription";
 import { userRouter } from "./routers/user";
+import { ticketRouter } from "./routers/ticket";
+import { organizationRouter } from "./routers/organization";
 import { createCallerFactory, createTRPCRouter } from "./trpc";
 
 export const appRouter = createTRPCRouter({
   subscriptionRouter,
   userRouter,
+  ticket: ticketRouter,
+  organization: organizationRouter,
 });
 
 // export type definition of API
