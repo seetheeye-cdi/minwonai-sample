@@ -39,77 +39,77 @@
   },
   "targetUsers": {
     "sectionTitle": "Who It's For",
-    "title": "Your Ideal Audience",
-    "description": "Briefly describe who will get the most value from your product.",
+    "title": "Perfect for These Organizations",
+    "description": "A solution for public institutions seeking to resolve complaint workload overburden.",
     "users": {
       "solo": {
-        "label": "Persona B",
-        "title": "Persona B",
-        "description": "Short description for this persona.",
-        "persona1": "Key trait 1",
-        "persona2": "Key trait 2",
-        "persona3": "Key trait 3"
+        "label": "City Hall Office",
+        "title": "City Hall Secretary's Office",
+        "description": "An efficiency tool for secretary offices that need to quickly process mayor-directed complaints and report back.",
+        "persona1": "Urgent complaint response needed",
+        "persona2": "Multi-department coordination required",
+        "persona3": "Accurate answers and quick feedback demanded"
       },
       "startup": {
-        "label": "Persona C",
-        "title": "Persona C",
-        "description": "Short description for this persona.",
-        "persona1": "Key trait 1",
-        "persona2": "Key trait 2",
-        "persona3": "Key trait 3"
+        "label": "District Office",
+        "title": "Community Service Centers",
+        "description": "Maximizes efficiency for frontline district offices handling diverse complaints with limited staff.",
+        "persona1": "Excessive complaints per person",
+        "persona2": "Time-consuming classification and assignment",
+        "persona3": "Lack of standardized response templates"
       },
       "vibecoder": {
-        "label": "Persona A",
-        "title": "Persona A",
-        "description": "Short description for this persona.",
-        "persona1": "Key trait 1",
-        "persona2": "Key trait 2",
-        "persona3": "Key trait 3"
+        "label": "Municipal Office",
+        "title": "Local Government Civil Service Staff",
+        "description": "A solution for civil service staff who process hundreds of complaints daily and lose time to phone support.",
+        "persona1": "100+ daily complaint intake",
+        "persona2": "Frequent work interruptions from phone inquiries",
+        "persona3": "Repetitive progress notification overload"
       }
     }
   },
   "roadmap": {
     "sectionTitle": "Roadmap",
-    "title": "What's Next",
-    "description": "Outline your upcoming milestones and priorities.",
+    "title": "More Powerful Features Coming",
+    "description": "Building the perfect complaint management system with continuous upgrades based on field feedback.",
 
     "features": {
       "contextIntegration": {
-        "name": "Upcoming Feature A",
-        "description": "Short description for this upcoming feature.",
-        "cta": "Get Notified"
+        "name": "Multi-stage Approval Workflow",
+        "description": "Adding step-by-step approval process for complex complaints and automatic official document PDF generation.",
+        "cta": "Q2 2025"
       },
       "teamCollaboration": {
-        "name": "Upcoming Feature B",
-        "description": "Short description for this upcoming feature.",
-        "cta": "Get Notified"
+        "name": "AI Chatbot Pre-response",
+        "description": "Citizens can chat directly with the bot to resolve simple complaints immediately, only complex cases are submitted.",
+        "cta": "Q3 2025"
       },
       "milestoneRoadmap": {
-        "name": "Upcoming Feature C",
-        "description": "Short description for this upcoming feature.",
-        "cta": "Get Notified"
+        "name": "Big Data Insights",
+        "description": "Dashboard providing proactive response strategies through complaint pattern analysis.",
+        "cta": "Q3 2025"
       },
       "insights": {
-        "name": "Upcoming Feature D",
-        "description": "Short description for this upcoming feature.",
-        "cta": "Get Notified"
+        "name": "On-premises Version",
+        "description": "Supporting installation version and kiosk integration for security-critical institutions.",
+        "cta": "Q4 2025"
       },
       "whatsNext": {
-        "name": "Share Feedback",
-        "description": "Invite users to share feedback in your community.",
-        "cta": "Provide Feedback"
+        "name": "Join Pilot Program",
+        "description": "Following success in Gunpo City and Seodaemun District, we're recruiting the next pilot institutions.",
+        "cta": "Apply Now"
       }
     },
     "community": {
-      "title": "Join the Community",
-      "description": "Invite your audience to participate and stay updated.\nKeep it short and friendly.",
-      "hashtags": "#hashtag1 #hashtag2",
-      "cta": "Community"
+      "title": "Join the Pilot Program",
+      "description": "Experience complaint processing innovation directly with a 4-week free trial.\nOur dedicated support team ensures successful implementation.",
+      "hashtags": "#ComplaintInnovation #AIAutomation #PublicService",
+      "cta": "Apply for Pilot"
     }
   },
   "pricing": {
-    "title": "Simple, Transparent Plans",
-    "description": "Describe your pricing in one sentence.",
+    "title": "Reasonable Pricing for Institution Size",
+    "description": "Special discount benefits for pilot program participants.",
     "yearlyDiscountLabel": "Save 35%",
     "frequencies": {
       "monthly": "Monthly",
@@ -117,44 +117,44 @@
     },
     "plans": {
       "free": {
-        "title": "Free",
-        "unit": "/month",
-        "description": "Great for getting started",
-        "credits": "100 credits/month",
-        "projects": "Up to 3 projects",
-        "ai": "Basic features",
-        "support": "Community support",
-        "buttonText": "Get Started Free"
+        "title": "Pilot",
+        "unit": "4 weeks free",
+        "description": "Pilot Program",
+        "credits": "1,000 complaints/month",
+        "projects": "All features available",
+        "ai": "AI classification & response",
+        "support": "Dedicated support team",
+        "buttonText": "Apply for Pilot"
       },
       "pro": {
-        "title": "Pro",
+        "title": "Standard",
         "unit": "/month",
-        "description": "For growing developers or teams",
-        "credits": "500 credits/month",
-        "projects": "Unlimited projects",
-        "ai": "Advanced features",
-        "designer": "Additional tools",
-        "buttonText": "Choose Pro"
+        "description": "For small institutions",
+        "credits": "3,000 complaints/month",
+        "projects": "Up to 50 users",
+        "ai": "All AI features included",
+        "designer": "5 custom templates",
+        "buttonText": "Choose Standard"
       },
       "max5": {
-        "title": "Business",
+        "title": "Professional",
         "unit": "/month",
-        "description": "For professional usage",
-        "credits": "2,000 credits/month",
-        "usage": "Enhanced usage",
-        "ai": "Premium features",
-        "image": "Image attachment",
-        "buttonText": "Choose Business"
+        "description": "For medium institutions",
+        "credits": "10,000 complaints/month",
+        "usage": "Up to 200 users",
+        "ai": "Advanced AI analytics",
+        "image": "Unlimited custom templates",
+        "buttonText": "Choose Professional"
       },
       "max20": {
-        "title": "Enterprise+",
-        "unit": "/month",
-        "description": "For high-usage needs",
-        "credits": "10,000 credits/month",
-        "usage": "Premium usage",
-        "ai": "Top features",
-        "context": "Largest limit",
-        "buttonText": "Choose Enterprise+"
+        "title": "Enterprise",
+        "unit": "Custom quote",
+        "description": "For large institutions",
+        "credits": "Unlimited complaints",
+        "usage": "Unlimited users",
+        "ai": "Dedicated AI model training",
+        "context": "On-premises available",
+        "buttonText": "Request Quote"
       }
     },
     "beta": {
@@ -163,30 +163,30 @@
   },
   "faq": {
     "title": "Frequently Asked Questions",
-    "description": "Replace with a short introduction to your FAQ.",
+    "description": "Find answers about CivicAid implementation.",
     "item1": {
-      "question": "Write your question here",
-      "answer": "Write a concise answer here."
+      "question": "What if AI misclassifies a complaint?",
+      "answer": "Staff can manually change categories and assignees anytime. Modified data is reflected in AI training for continuous accuracy improvement."
     },
     "item2": {
-      "question": "Write your question here",
-      "answer": "Write a concise answer here."
+      "question": "Can it integrate with existing systems?",
+      "answer": "Yes, integration is possible through APIs. Customization support is also available when needed."
     },
     "item3": {
-      "question": "Write your question here",
-      "answer": "Write a concise answer here."
+      "question": "Is personal data secure?",
+      "answer": "All data is encrypted and stored with ISO 27001 certified security systems. On-premises installation is also available."
     },
     "item4": {
-      "question": "Write your question here",
-      "answer": "Write a concise answer here."
+      "question": "How is training conducted after implementation?",
+      "answer": "Our dedicated support team assists the entire process from initial setup to staff training. Online training materials and real-time support are provided."
     },
     "item5": {
-      "question": "Write your question here",
-      "answer": "Write a concise answer here."
+      "question": "What if Kakao AlimTalk approval takes long?",
+      "answer": "SMS is immediately available as a backup channel. Notifications are sent via SMS until Kakao approval, then automatically switched."
     },
     "item6": {
-      "question": "Write your question here",
-      "answer": "Write a concise answer here."
+      "question": "What happens to data if we don't contract after pilot?",
+      "answer": "All data from the pilot period is provided as an Excel file. 100% data ownership belongs to the institution."
     }
   },
   "footer": {
