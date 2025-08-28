@@ -2,7 +2,6 @@ import { Metadata } from "next";
 
 import "@myapp/ui/globals.css";
 import { TRPCProvider } from "@/utils/trpc/client";
-import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@myapp/ui/components/sonner";
 import localFont from "next/font/local";
 import { GoogleAnalytics4 } from "@/integrations/ga4";
@@ -31,14 +30,10 @@ export default function RootLayout({
       >
         <GoogleAnalytics4 />
         <Clarity />
-        <ClerkProvider
-          publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ?? ""}
-        >
-          <TRPCProvider>
-            <main>{children}</main>
-            <Toaster position="top-center" closeButton />
-          </TRPCProvider>
-        </ClerkProvider>
+        <TRPCProvider>
+          <main>{children}</main>
+          <Toaster position="top-center" closeButton />
+        </TRPCProvider>
       </body>
     </html>
   );

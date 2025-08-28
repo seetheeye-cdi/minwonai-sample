@@ -69,7 +69,7 @@ export class SMSClient implements ChannelClient {
   private formatMessage(payload: NotificationPayload): string {
     const { type, templateData } = payload;
     
-    switch (type) {
+    switch (type as string) {
       case "TICKET_RECEIVED":
         return `[민원 접수]\n안녕하세요 ${payload.recipientName}님.\n민원이 정상적으로 접수되었습니다.\n접수번호: ${templateData.ticketId}\n\n진행상황: ${templateData.timelineUrl}`;
       

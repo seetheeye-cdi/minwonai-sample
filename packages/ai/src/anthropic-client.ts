@@ -67,7 +67,7 @@ export class AnthropicClient {
       });
 
       const textContent = response.content[0];
-      if (textContent.type !== "text") {
+      if (!textContent || textContent.type !== "text") {
         throw new Error("Unexpected response type from Claude");
       }
 
@@ -86,8 +86,8 @@ export class AnthropicClient {
         priority: validated.priority as TicketPriority,
         summary: validated.summary,
         draftAnswer: validated.draftAnswer,
-        suggestedAssigneeEmail: validated.suggestedAssigneeEmail,
-        confidenceScore: 0.9, // Claude doesn't provide confidence scores
+        suggestedAssigneeId: validated.suggestedAssigneeEmail, // Map email to ID
+        confidence: 0.9, // Claude doesn't provide confidence scores
       };
     } catch (error) {
       console.error("Anthropic classification error:", error);
@@ -135,7 +135,7 @@ ${tonePrompt ? `답변은 ${tonePrompt} 작성해주세요.` : ''}
       });
 
       const textContent = response.content[0];
-      if (textContent.type !== "text") {
+      if (!textContent || textContent.type !== "text") {
         throw new Error("Unexpected response type from Claude");
       }
 

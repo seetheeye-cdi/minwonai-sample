@@ -20,6 +20,7 @@ import { Skeleton } from "@myapp/ui/components/skeleton";
 import { Alert, AlertDescription } from "@myapp/ui/components/alert";
 import { TicketStatusBadge } from "./TicketStatusBadge";
 import { TicketPriorityBadge } from "./TicketPriorityBadge";
+import { SentimentIndicator, SentimentPriorityBadge } from "./SentimentIndicator";
 import { useRouter } from "@/i18n/navigation";
 import type { TicketListItem } from "../types";
 
@@ -114,6 +115,7 @@ export function TicketList({ tickets, isLoading, error, total, hasMore }: Ticket
                 <TableHead>{t("columns.citizen")}</TableHead>
                 <TableHead>{t("columns.content")}</TableHead>
                 <TableHead>{t("columns.category")}</TableHead>
+                <TableHead>{t("columns.sentiment")}</TableHead>
                 <TableHead>{t("columns.status")}</TableHead>
                 <TableHead>{t("columns.priority")}</TableHead>
                 <TableHead>{t("columns.assignee")}</TableHead>
@@ -150,6 +152,14 @@ export function TicketList({ tickets, isLoading, error, total, hasMore }: Ticket
                           {ticket.category}
                         </Badge>
                       )}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <SentimentIndicator sentiment={ticket.sentiment} size="sm" showLabel={false} />
+                        {ticket.sentiment === "NEGATIVE" && (
+                          <SentimentPriorityBadge sentiment={ticket.sentiment} priority={ticket.priority} />
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell>
                       <TicketStatusBadge status={ticket.status} />

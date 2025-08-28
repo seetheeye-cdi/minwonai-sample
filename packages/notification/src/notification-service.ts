@@ -34,16 +34,20 @@ export class NotificationService {
 
   async queueNotification(payload: NotificationPayload): Promise<string> {
     const preferredChannel = this.determineChannel(payload);
+    const recipient = payload.recipientEmail || payload.recipientPhone || "unknown";
     
     const queue = await prisma.notificationQueue.create({
       data: {
         ticketId: payload.ticketId,
-        type: payload.type,
-        recipientName: payload.recipientName,
-        recipientPhone: payload.recipientPhone,
-        recipientEmail: payload.recipientEmail,
-        templateData: payload.templateData,
-        preferredChannel,
+        type: this.mapNotificationType(payload.type),
+        channel: preferredChannel,
+        recipient,
+        payload: {
+          recipientName: payload.recipientName,
+          recipientPhone: payload.recipientPhone,
+          recipientEmail: payload.recipientEmail,
+          templateData: payload.templateData,
+        },
         status: "PENDING",
       },
     });
@@ -57,7 +61,6 @@ export class NotificationService {
   async processNotification(queueId: string): Promise<void> {
     const queue = await prisma.notificationQueue.findUnique({
       where: { id: queueId },
-      include: { ticket: true },
     });
 
     if (!queue || queue.status !== "PENDING") {
@@ -67,47 +70,46 @@ export class NotificationService {
     // Update attempts
     await prisma.notificationQueue.update({
       where: { id: queueId },
-      data: { attempts: { increment: 1 } },
+      data: { 
+        attemptCount: { increment: 1 },
+        lastAttemptAt: new Date()
+      },
     });
 
+    // Extract payload data
+    const payloadData = queue.payload as any;
+    
     // Try preferred channel first
-    let result = await this.sendViaChannel(queue.preferredChannel, {
+    let result = await this.sendViaChannel(queue.channel, {
       ticketId: queue.ticketId,
-      type: queue.type as NotificationType,
-      recipientName: queue.recipientName,
-      recipientPhone: queue.recipientPhone || undefined,
-      recipientEmail: queue.recipientEmail || undefined,
-      templateData: queue.templateData as Record<string, any>,
+      type: this.reverseMapNotificationType(queue.type),
+      recipientName: payloadData.recipientName,
+      recipientPhone: payloadData.recipientPhone || undefined,
+      recipientEmail: payloadData.recipientEmail || undefined,
+      templateData: payloadData.templateData as Record<string, any>,
     });
 
     // If preferred channel fails, try fallback
     if (!result.success) {
-      const fallbackChannel = this.getFallbackChannel(queue.preferredChannel);
+      const fallbackChannel = this.getFallbackChannel(queue.channel);
       if (fallbackChannel) {
         result = await this.sendViaChannel(fallbackChannel, {
           ticketId: queue.ticketId,
-          type: queue.type as NotificationType,
-          recipientName: queue.recipientName,
-          recipientPhone: queue.recipientPhone || undefined,
-          recipientEmail: queue.recipientEmail || undefined,
-          templateData: queue.templateData as Record<string, any>,
+          type: this.reverseMapNotificationType(queue.type),
+          recipientName: payloadData.recipientName,
+          recipientPhone: payloadData.recipientPhone || undefined,
+          recipientEmail: payloadData.recipientEmail || undefined,
+          templateData: payloadData.templateData as Record<string, any>,
         });
       }
     }
 
-    // Log the attempt
-    await prisma.notificationLog.create({
-      data: {
-        queueId,
-        channel: result.channel,
-        status: result.success ? "SENT" : "FAILED",
-        attemptNumber: queue.attempts + 1,
-        sentAt: new Date(),
-        responseAt: new Date(),
-        requestData: queue.templateData,
-        responseData: result.metadata || null,
-        errorMessage: result.error || null,
-      },
+    // TODO: Add proper notification logging when notificationLog table is available
+    // For now, log to console
+    console.log(`Notification attempt for ${queue.id}:`, {
+      channel: result.channel,
+      success: result.success,
+      error: result.error,
     });
 
     // Update queue status
@@ -116,18 +118,16 @@ export class NotificationService {
         where: { id: queueId },
         data: {
           status: "SENT",
-          currentChannel: result.channel,
+          channel: result.channel,
           sentAt: new Date(),
-          metadata: result.metadata || null,
         },
       });
-    } else if (queue.attempts >= queue.maxAttempts - 1) {
+    } else if (queue.attemptCount >= 2) { // Max 3 attempts (0-indexed)
       await prisma.notificationQueue.update({
         where: { id: queueId },
         data: {
           status: "FAILED",
-          failedAt: new Date(),
-          errorMessage: result.error,
+          error: result.error,
         },
       });
     }
@@ -208,19 +208,58 @@ export class NotificationService {
     }
   }
 
+  private mapNotificationType(type: string): NotificationType {
+    const mapping: Record<string, NotificationType> = {
+      "TICKET_RECEIVED": "RECEIPT_CONFIRMATION",
+      "TICKET_ASSIGNED": "STATUS_UPDATE",
+      "TICKET_REPLIED": "REPLY_SENT",
+      "TICKET_CLOSED": "STATUS_UPDATE",
+      "SLA_WARNING": "STATUS_UPDATE",
+      "SATISFACTION_REQUEST": "SATISFACTION_REQUEST",
+    };
+    return mapping[type] || "STATUS_UPDATE";
+  }
+
+  private reverseMapNotificationType(type: NotificationType): string {
+    const mapping: Record<NotificationType, string> = {
+      "RECEIPT_CONFIRMATION": "TICKET_RECEIVED",
+      "STATUS_UPDATE": "TICKET_ASSIGNED",
+      "REPLY_SENT": "TICKET_REPLIED",
+      "SATISFACTION_REQUEST": "SATISFACTION_REQUEST",
+    };
+    return mapping[type] || type;
+  }
+
   async processPendingNotifications(): Promise<void> {
     const pendingNotifications = await prisma.notificationQueue.findMany({
       where: {
         status: "PENDING",
-        attempts: { lt: 3 },
-        scheduledAt: { lte: new Date() },
+        attemptCount: { lt: 3 },
       },
-      orderBy: { scheduledAt: "asc" },
+      orderBy: {
+        scheduledFor: "asc",
+      },
       take: 10,
     });
 
-    for (const notification of pendingNotifications) {
-      await this.processNotification(notification.id);
-    }
+    await Promise.allSettled(
+      pendingNotifications.map((notification) =>
+        this.processNotification(notification.id)
+      )
+    );
+  }
+
+  // Simple rate limiting helper
+  private async canSendNotification(recipient: string): Promise<boolean> {
+    const recentNotifications = await prisma.notificationQueue.count({
+      where: {
+        recipient,
+        createdAt: {
+          gte: new Date(Date.now() - 60 * 60 * 1000), // Last hour
+        },
+      },
+    });
+
+    return recentNotifications < 10; // Max 10 per hour
   }
 }

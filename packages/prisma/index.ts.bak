@@ -1,7 +1,9 @@
-// Prisma Client 및 타입 재수출
+// prisma/client.ts 와 같은 파일
+
 import { PrismaClient } from "./generated/prisma";
 
-// Prisma Client 싱글톤 인스턴스
+export * from "./generated/prisma";
+
 const createExtendedPrismaClient = () => {
   return new PrismaClient();
 };
@@ -16,7 +18,3 @@ export const prisma: PrismaClient =
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
 }
-
-// 모든 Prisma 타입과 유틸리티 재수출
-// Sentiment, TicketPriority 등 모든 타입과 enum이 포함됨
-export * from "./generated/prisma";

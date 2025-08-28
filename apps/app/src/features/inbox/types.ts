@@ -1,9 +1,10 @@
-import type { TicketStatus, TicketPriority } from "@myapp/prisma";
+import type { TicketStatus, TicketPriority, Sentiment } from "@myapp/prisma";
 
 export interface TicketFilters {
   search: string;
   status?: TicketStatus;
   priority?: TicketPriority;
+  sentiment?: Sentiment;
   assignedToId?: string;
   slaApproaching: boolean;
 }
@@ -13,6 +14,7 @@ export interface TicketListItem {
   citizenName: string;
   content: string;
   category?: string | null;
+  sentiment?: Sentiment | null;
   status: TicketStatus;
   priority: TicketPriority;
   assignedTo?: {

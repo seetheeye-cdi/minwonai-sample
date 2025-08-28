@@ -26,6 +26,8 @@ import { ko } from "date-fns/locale";
 import { SatisfactionForm } from "./components/SatisfactionForm";
 import { TimelineItem } from "./components/TimelineItem";
 import { cn } from "@myapp/ui/lib/utils";
+import { LikeButton } from "@/features/community/components/LikeButton";
+import { CommentSection } from "@/features/community/components/CommentSection";
 
 interface TimelinePageProps {
   token: string;
@@ -234,6 +236,20 @@ export function TimelinePage({ token }: TimelinePageProps) {
           </CardContent>
         </Card>
 
+        {/* Community Interaction (if public) */}
+        {ticket.source === "community" && ticket.isPublic && (
+          <Card className="mb-6">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-4">
+                <LikeButton publicToken={ticket.publicToken} />
+                <span className="text-sm text-gray-500">
+                  이 민원이 도움이 되셨나요?
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Timeline */}
         <Card className="mb-6">
           <CardHeader>
@@ -282,6 +298,11 @@ export function TimelinePage({ token }: TimelinePageProps) {
                 ))}
             </CardContent>
           </Card>
+        )}
+
+        {/* Comments Section (if public) */}
+        {ticket.source === "community" && ticket.isPublic && (
+          <CommentSection publicToken={ticket.publicToken} />
         )}
 
         {/* Satisfaction Survey */}

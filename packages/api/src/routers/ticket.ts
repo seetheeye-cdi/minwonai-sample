@@ -92,12 +92,14 @@ export const ticketRouter = createTRPCRouter({
   list: protectedProcedure
     .input(
       z.object({
+        search: z.string().optional(),
         status: z.nativeEnum(TicketStatus).optional(),
         priority: z.nativeEnum(TicketPriority).optional(),
         sentiment: z.nativeEnum(Sentiment).optional(),
         assignedToId: z.string().optional(),
+        slaApproaching: z.boolean().optional(),
+        cursor: z.string().optional(),
         limit: z.number().min(1).max(100).default(20),
-        offset: z.number().min(0).default(0),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -108,7 +110,8 @@ export const ticketRouter = createTRPCRouter({
         });
       }
 
-      const where = {
+      // Build where clause with search and filters
+      const where: any = {
         organizationId: ctx.organizationId,
         ...(input.status && { status: input.status }),
         ...(input.priority && { priority: input.priority }),
@@ -116,46 +119,77 @@ export const ticketRouter = createTRPCRouter({
         ...(input.assignedToId && { assignedToId: input.assignedToId }),
       };
 
-      const [tickets, total] = await Promise.all([
-        prisma.ticket.findMany({
-          where,
-          select: {
-            id: true,
-            citizenName: true,
-            content: true,
-            category: true,
-            sentiment: true,
-            status: true,
-            priority: true,
-            slaDueAt: true,
-            createdAt: true,
-            assignedTo: {
-              select: {
-                id: true,
-                username: true,
-                email: true,
-              },
-            },
-            _count: {
-              select: {
-                updates: true,
-              },
+      // Add search conditions
+      if (input.search) {
+        where.OR = [
+          { citizenName: { contains: input.search, mode: "insensitive" } },
+          { content: { contains: input.search, mode: "insensitive" } },
+          { category: { contains: input.search, mode: "insensitive" } },
+        ];
+      }
+
+      // Add SLA approaching filter
+      if (input.slaApproaching) {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        where.slaDueAt = {
+          lte: tomorrow,
+          gte: new Date(),
+        };
+      }
+
+      // Cursor-based pagination
+      const tickets = await prisma.ticket.findMany({
+        where,
+        select: {
+          id: true,
+          citizenName: true,
+          content: true,
+          category: true,
+          sentiment: true,
+          status: true,
+          priority: true,
+          slaDueAt: true,
+          createdAt: true,
+          assignedTo: {
+            select: {
+              id: true,
+              username: true,
+              email: true,
             },
           },
-          orderBy: [
-            { priority: "desc" },
-            { createdAt: "desc" },
-          ],
-          take: input.limit,
-          skip: input.offset,
+          _count: {
+            select: {
+              updates: true,
+            },
+          },
+        },
+        orderBy: [
+          { priority: "desc" },
+          { createdAt: "desc" },
+        ],
+        take: input.limit + 1,
+        ...(input.cursor && {
+          cursor: { id: input.cursor },
+          skip: 1,
         }),
-        prisma.ticket.count({ where }),
-      ]);
+      });
+
+      // Check if there are more items
+      let nextCursor: string | undefined = undefined;
+      if (tickets.length > input.limit) {
+        const nextItem = tickets.pop();
+        nextCursor = nextItem!.id;
+      }
+
+      // Count total for statistics (optional, can be removed for performance)
+      const total = await prisma.ticket.count({ where });
 
       return {
         tickets,
         total,
-        hasMore: input.offset + tickets.length < total,
+        nextCursor,
+        hasMore: !!nextCursor,
       };
     }),
 

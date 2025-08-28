@@ -12,7 +12,30 @@ const UserContext = createContext<
 >(undefined);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
-  const [user] = trpc.userRouter.getMe.useSuspenseQuery(undefined, {
+  const skipAuth = process.env.NEXT_PUBLIC_SKIP_AUTH === "true";
+  
+  // Mock user data when auth is skipped
+  if (skipAuth) {
+    const mockUser = {
+      id: "test_user",
+      clerkId: "test_user",
+      email: "test@example.com",
+      name: "Test User",
+      organizationId: "test_org",
+      organization: {
+        id: "test_org",
+        name: "Test Organization",
+      },
+    };
+    
+    return (
+      <UserContext.Provider value={{ user: mockUser as any }}>
+        {children}
+      </UserContext.Provider>
+    );
+  }
+  
+  const [user] = trpc.user.getMe.useSuspenseQuery(undefined, {
     retry: 0,
   });
 

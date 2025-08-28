@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.60.0",
+    "@myapp/prisma": "workspace:*",
     "openai": "^4.67.3",
     "zod": "^3.22.2"
   }

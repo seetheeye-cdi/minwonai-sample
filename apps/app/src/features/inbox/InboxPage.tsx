@@ -15,6 +15,7 @@ export function InboxPage() {
     search: "",
     status: undefined,
     priority: undefined,
+    sentiment: undefined,
     assignedToId: undefined,
     slaApproaching: false,
   });

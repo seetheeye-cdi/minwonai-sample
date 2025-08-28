@@ -28,10 +28,11 @@ import {
   CreditCard,
   Settings,
   HelpCircle,
+  MessageSquare,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { SignedIn } from "@/components/clerk/SignedIn";
-import { UserButton } from "@/components/clerk/UserButton";
+// import { SignedIn } from "@/components/clerk/SignedIn";
+// import { UserButton } from "@/components/clerk/UserButton";
 import { Link } from "@/i18n/navigation";
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
@@ -44,6 +45,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   }> = [
     { label: tLayout("nav.overview"), icon: Home, href: "/" },
     { label: tLayout("nav.inbox"), icon: Inbox, href: "/inbox" },
+    { label: tLayout("nav.community"), icon: MessageSquare, href: "/community" },
     { label: tLayout("nav.analytics"), icon: BarChart3, href: "#" },
     { label: tLayout("nav.customers"), icon: Users, href: "#" },
     { label: tLayout("nav.billing"), icon: CreditCard, href: "/subscription" },
@@ -105,9 +107,10 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                 className="w-56"
               />
             </div>
-            <SignedIn>
+            {/* <SignedIn>
               <UserButton afterSignOutUrl="/" />
-            </SignedIn>
+            </SignedIn> */}
+            <div className="w-8 h-8 rounded-full bg-gray-300" />
           </div>
         </div>
 

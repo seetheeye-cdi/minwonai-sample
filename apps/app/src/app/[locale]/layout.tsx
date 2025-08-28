@@ -1,4 +1,3 @@
-import { ClerkProvider } from "@clerk/nextjs";
 import { Loader } from "lucide-react";
 import { Suspense } from "react";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
@@ -6,9 +5,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import { AuthGuard } from "@/components/clerk/AuthGuard";
 import { LayoutContent } from "./_client";
-import { UserProvider } from "@/components/providers/user";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -45,11 +42,7 @@ export default async function LocaleLayout({
         >
           <NextIntlClientProvider messages={messages}>
             <Suspense fallback={<Skeleton />}>
-              <ClerkProvider dynamic>
-                <AuthGuard fallback={<Skeleton />}>
-                  <LayoutContent>{children}</LayoutContent>
-                </AuthGuard>
-              </ClerkProvider>
+              <LayoutContent>{children}</LayoutContent>
             </Suspense>
           </NextIntlClientProvider>
         </ThemeProvider>

@@ -7,6 +7,7 @@
     "nav": {
       "overview": "대시보드",
       "inbox": "민원함",
+      "community": "커뮤니티",
       "analytics": "분석",
       "customers": "고객",
       "billing": "결제",
@@ -38,6 +39,43 @@
     },
     "chart": {
       "title": "월간 매출"
+    }
+  },
+  "CivicAidDashboard": {
+    "title": "실시간 민원 대시보드",
+    "description": "오늘의 민원 처리 현황과 주요 지표를 확인하세요",
+    "metrics": {
+      "todayReceived": "오늘 접수",
+      "todayCompleted": "오늘 완료",
+      "todayDelayed": "지연 건수",
+      "avgResponseTime": "평균 응답시간",
+      "weekTotal": "주간 누적",
+      "totalOpen": "미처리 전체",
+      "minutes": "분",
+      "satisfactionScore": "만족도 점수"
+    },
+    "chart": {
+      "ticketTrend": "일별 민원 처리 추이",
+      "categoryDistribution": "카테고리별 분포",
+      "last7Days": "최근 7일간",
+      "received": "접수",
+      "completed": "완료",
+      "noData": "표시할 데이터가 없습니다"
+    },
+    "sla": {
+      "title": "SLA 임박 민원",
+      "description": "24시간 내 처리가 필요한 민원 목록",
+      "viewAll": "전체 보기",
+      "ticketId": "민원 ID",
+      "citizen": "신청인",
+      "category": "카테고리",
+      "priority": "우선순위",
+      "status": "상태",
+      "assignee": "담당자",
+      "remaining": "남은 시간",
+      "uncategorized": "미분류",
+      "unassigned": "미배정",
+      "noTickets": "SLA 임박 민원이 없습니다"
     }
   },
   "SettingsPage": {
@@ -148,6 +186,13 @@
         "high": "높음",
         "urgent": "긴급"
       },
+      "sentiment": {
+        "placeholder": "감정",
+        "all": "전체",
+        "positive": "긍정",
+        "neutral": "중립",
+        "negative": "부정"
+      },
       "moreFilters": "추가 필터",
       "additionalFilters": "추가 필터 옵션",
       "additionalFiltersDescription": "더 세부적인 검색 조건을 설정하세요.",
@@ -167,6 +212,7 @@
         "citizen": "민원인",
         "content": "내용",
         "category": "카테고리",
+        "sentiment": "감정",
         "status": "상태",
         "priority": "우선순위",
         "assignee": "담당자",
@@ -188,7 +234,16 @@
       "low": "낮음",
       "normal": "보통",
       "high": "높음",
-      "urgent": "긴급"
+      "urgent": "긴급",
+      "highAlert": "긴급 주의"
+    },
+    "sentiment": {
+      "positive": "긍정",
+      "neutral": "중립",
+      "negative": "부정",
+      "positiveDesc": "감사 또는 칭찬 표현",
+      "neutralDesc": "일반적인 문의 또는 요청",
+      "negativeDesc": "불만 또는 항의 표현"
     }
   },
   "TicketDetailPage": {
@@ -263,6 +318,21 @@
       "needMoreInfo": "안녕하세요. 귀하의 민원을 처리하기 위해 추가 정보가 필요합니다. 자세한 내용을 회신해주시면 신속히 처리하겠습니다.",
       "resolvedTitle": "처리 완료",
       "resolved": "안녕하세요. 귀하의 민원이 처리 완료되었습니다. 추가 문의사항이 있으시면 언제든 연락주시기 바랍니다. 감사합니다."
+    }
+  },
+  "CommunityPage": {
+    "title": "민원 커뮤니티",
+    "description": "시민 여러분의 목소리를 직접 전달하고, 다른 시민들과 소통하는 공간입니다",
+    "infoAlert": "이곳에 접수된 민원은 공개적으로 게시되며, 다른 시민들이 열람할 수 있습니다. 개인정보는 자동으로 마스킹 처리됩니다.",
+    "submitButton": "새 민원 접수하기",
+    "submitForm": {
+      "title": "민원 접수",
+      "description": "아래 양식을 작성하여 민원을 접수해주세요. * 표시는 필수 항목입니다."
+    },
+    "tabs": {
+      "recent": "최근 민원",
+      "popular": "인기 민원",
+      "replied": "답변 완료"
     }
   }
 }

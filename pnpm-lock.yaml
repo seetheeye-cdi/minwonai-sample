@@ -36,6 +36,9 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.6.11
         version: 0.6.14(prettier@3.6.2)
+      tsx:
+        specifier: 4.19.1
+        version: 4.19.1
       turbo:
         specifier: ^2.5.3
         version: 2.5.6
@@ -44,7 +47,7 @@ importers:
     dependencies:
       '@clerk/nextjs':
         specifier: ^6.28.1
-        version: 6.31.6(next@15.4.5(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 6.31.6(next@15.4.5(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@hookform/resolvers':
         specifier: ^5.2.1
         version: 5.2.1(react-hook-form@7.62.0(react@19.1.0))
@@ -111,6 +114,9 @@ importers:
       react-hook-form:
         specifier: ^7.62.0
         version: 7.62.0(react@19.1.0)
+      recharts:
+        specifier: ^2.15.4
+        version: 2.15.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       sonner:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -242,6 +248,9 @@ importers:
       '@anthropic-ai/sdk':
         specifier: ^0.60.0
         version: 0.60.0
+      '@myapp/prisma':
+        specifier: workspace:*
+        version: link:../prisma
       openai:
         specifier: ^4.67.3
         version: 4.104.0(zod@3.25.76)
@@ -306,7 +315,7 @@ importers:
     devDependencies:
       '@clerk/nextjs':
         specifier: ^6.20.1
-        version: 6.31.6(next@15.4.5(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 6.31.6(next@15.4.5(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@myapp/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint-config
@@ -6072,7 +6081,7 @@ snapshots:
       react-dom: 19.1.0(react@19.1.0)
       tslib: 2.8.1
 
-  '@clerk/nextjs@6.31.6(next@15.4.5(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@clerk/nextjs@6.31.6(next@15.4.5(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@clerk/backend': 2.10.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@clerk/clerk-react': 5.45.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)

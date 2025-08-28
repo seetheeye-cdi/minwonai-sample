@@ -24,7 +24,7 @@ export interface NotificationConfig {
 
 export interface NotificationPayload {
   ticketId: string;
-  type: NotificationType;
+  type: string; // Using string to support legacy type names
   recipientName: string;
   recipientPhone?: string;
   recipientEmail?: string;

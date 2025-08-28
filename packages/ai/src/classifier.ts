@@ -38,7 +38,7 @@ export class ComplaintClassifier {
         category: "기타",
         sentiment: "NEUTRAL",
         priority: "NORMAL",
-        confidenceScore: 0.0,
+        confidence: 0.0,
         summary: "AI 분류 실패 - 수동 검토 필요",
         draftAnswer: "민원을 접수했습니다. 담당자가 확인 후 연락드리겠습니다.",
       };

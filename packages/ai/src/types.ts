@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+// Prisma에서 직접 타입 import
+import type { Sentiment, TicketPriority } from "@myapp/prisma";
+
+// 타입 재수출
+export type { Sentiment, TicketPriority };
+
 // AI 분류 결과 스키마
 export const AIClassificationResultSchema = z.object({
   category: z.string().describe("민원 카테고리 (예: 환경/미화, 교통, 건설/도로 등)"),
@@ -8,6 +14,7 @@ export const AIClassificationResultSchema = z.object({
   suggestedAssigneeId: z.string().optional().describe("추천 담당자 ID"),
   confidence: z.number().min(0).max(1).describe("분류 신뢰도 (0-1)"),
   summary: z.string().describe("민원 요약"),
+  draftAnswer: z.string().optional().describe("AI 생성 답변 초안"),
 });
 
 export type AIClassificationResult = z.infer<typeof AIClassificationResultSchema>;

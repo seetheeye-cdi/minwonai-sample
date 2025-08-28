@@ -21,7 +21,7 @@ import {
 import { Checkbox } from "@myapp/ui/components/checkbox";
 import { useDebounce } from "@/hooks/useDebounce";
 import type { TicketFilters } from "../types";
-import { TicketStatus, TicketPriority } from "@myapp/prisma";
+import { TicketStatus, TicketPriority, Sentiment } from "@myapp/prisma";
 
 interface InboxFiltersProps {
   filters: TicketFilters;
@@ -54,6 +54,13 @@ export function InboxFilters({ filters, onFiltersChange }: InboxFiltersProps) {
     });
   };
 
+  const handleSentimentChange = (value: string) => {
+    onFiltersChange({
+      ...filters,
+      sentiment: value === "all" ? undefined : (value as Sentiment),
+    });
+  };
+
   const handleSlaApproachingChange = (checked: boolean) => {
     onFiltersChange({ ...filters, slaApproaching: checked });
   };
@@ -64,6 +71,7 @@ export function InboxFilters({ filters, onFiltersChange }: InboxFiltersProps) {
       search: "",
       status: undefined,
       priority: undefined,
+      sentiment: undefined,
       assignedToId: undefined,
       slaApproaching: false,
     });
@@ -72,6 +80,7 @@ export function InboxFilters({ filters, onFiltersChange }: InboxFiltersProps) {
   const activeFiltersCount = [
     filters.status,
     filters.priority,
+    filters.sentiment,
     filters.assignedToId,
     filters.slaApproaching,
   ].filter(Boolean).length;
@@ -123,6 +132,22 @@ export function InboxFilters({ filters, onFiltersChange }: InboxFiltersProps) {
             <SelectItem value="NORMAL">{t("priority.normal")}</SelectItem>
             <SelectItem value="HIGH">{t("priority.high")}</SelectItem>
             <SelectItem value="URGENT">{t("priority.urgent")}</SelectItem>
+          </SelectContent>
+        </Select>
+
+        {/* Sentiment Filter */}
+        <Select
+          value={filters.sentiment || "all"}
+          onValueChange={handleSentimentChange}
+        >
+          <SelectTrigger className="w-[120px]">
+            <SelectValue placeholder={t("sentiment.placeholder")} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t("sentiment.all")}</SelectItem>
+            <SelectItem value="POSITIVE">{t("sentiment.positive")}</SelectItem>
+            <SelectItem value="NEUTRAL">{t("sentiment.neutral")}</SelectItem>
+            <SelectItem value="NEGATIVE">{t("sentiment.negative")}</SelectItem>
           </SelectContent>
         </Select>
 

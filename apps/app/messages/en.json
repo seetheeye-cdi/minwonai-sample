@@ -7,6 +7,7 @@
     "nav": {
       "overview": "Overview",
       "inbox": "Inbox",
+      "community": "Community",
       "analytics": "Analytics",
       "customers": "Customers",
       "billing": "Billing",
@@ -38,6 +39,43 @@
     },
     "chart": {
       "title": "Monthly Revenue"
+    }
+  },
+  "CivicAidDashboard": {
+    "title": "Real-time Complaint Dashboard",
+    "description": "Monitor today's complaint processing status and key metrics",
+    "metrics": {
+      "todayReceived": "Received Today",
+      "todayCompleted": "Completed Today",
+      "todayDelayed": "Delayed",
+      "avgResponseTime": "Avg Response Time",
+      "weekTotal": "Week Total",
+      "totalOpen": "Total Open",
+      "minutes": "min",
+      "satisfactionScore": "Satisfaction Score"
+    },
+    "chart": {
+      "ticketTrend": "Daily Ticket Trend",
+      "categoryDistribution": "Category Distribution",
+      "last7Days": "Last 7 Days",
+      "received": "Received",
+      "completed": "Completed",
+      "noData": "No data to display"
+    },
+    "sla": {
+      "title": "SLA Approaching Tickets",
+      "description": "Tickets requiring attention within 24 hours",
+      "viewAll": "View All",
+      "ticketId": "Ticket ID",
+      "citizen": "Citizen",
+      "category": "Category",
+      "priority": "Priority",
+      "status": "Status",
+      "assignee": "Assignee",
+      "remaining": "Time Remaining",
+      "uncategorized": "Uncategorized",
+      "unassigned": "Unassigned",
+      "noTickets": "No SLA approaching tickets"
     }
   },
   "SettingsPage": {
@@ -148,6 +186,13 @@
         "high": "High",
         "urgent": "Urgent"
       },
+      "sentiment": {
+        "placeholder": "Sentiment",
+        "all": "All",
+        "positive": "Positive",
+        "neutral": "Neutral",
+        "negative": "Negative"
+      },
       "moreFilters": "More Filters",
       "additionalFilters": "Additional Filter Options",
       "additionalFiltersDescription": "Set more detailed search conditions.",
@@ -167,6 +212,7 @@
         "citizen": "Citizen",
         "content": "Content",
         "category": "Category",
+        "sentiment": "Sentiment",
         "status": "Status",
         "priority": "Priority",
         "assignee": "Assignee",
@@ -188,7 +234,16 @@
       "low": "Low",
       "normal": "Normal",
       "high": "High",
-      "urgent": "Urgent"
+      "urgent": "Urgent",
+      "highAlert": "High Alert"
+    },
+    "sentiment": {
+      "positive": "Positive",
+      "neutral": "Neutral",
+      "negative": "Negative",
+      "positiveDesc": "Expression of gratitude or praise",
+      "neutralDesc": "General inquiry or request",
+      "negativeDesc": "Expression of complaint or protest"
     }
   },
   "TicketDetailPage": {
@@ -263,6 +318,21 @@
       "needMoreInfo": "Hello. We need additional information to process your complaint. Please provide more details and we will process it quickly.",
       "resolvedTitle": "Resolved",
       "resolved": "Hello. Your complaint has been resolved. If you have any further questions, please feel free to contact us. Thank you."
+    }
+  },
+  "CommunityPage": {
+    "title": "Community Board",
+    "description": "A space where citizens can directly submit complaints and communicate with other citizens",
+    "infoAlert": "Complaints submitted here will be publicly posted and viewable by other citizens. Personal information will be automatically masked.",
+    "submitButton": "Submit New Complaint",
+    "submitForm": {
+      "title": "Submit Complaint",
+      "description": "Please fill out the form below to submit your complaint. * indicates required fields."
+    },
+    "tabs": {
+      "recent": "Recent",
+      "popular": "Popular",
+      "replied": "Replied"
     }
   }
 }

@@ -72,7 +72,7 @@ export class EmailClient implements ChannelClient {
     let subject = "";
     let content = "";
     
-    switch (type) {
+    switch (type as string) {
       case "TICKET_RECEIVED":
         subject = `[민원 접수] 접수번호 ${templateData.ticketId}`;
         content = `

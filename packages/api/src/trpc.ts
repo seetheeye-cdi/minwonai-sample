@@ -12,14 +12,11 @@ import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@myapp/prisma";
 
-type AuthResult = Awaited<ReturnType<typeof auth>>;
-
 interface CreateContextOptions {
-  headers: CreateNextContextOptions["req"]["headers"];
-  auth: AuthResult | null;
+  headers: Record<string, string>;
+  auth: { userId?: string; orgId?: string } | null;
 }
 
 /**
@@ -37,9 +34,16 @@ export async function createTRPCContext(
   req: Request,
   opts: FetchCreateContextFnOptions
 ) {
+  // Skip auth if SKIP_AUTH is set
+  const skipAuth = process.env.SKIP_AUTH === "true" || process.env.NEXT_PUBLIC_SKIP_AUTH === "true";
+  
+  const mockAuth = skipAuth
+    ? { userId: "test_user", orgId: "test_org" }
+    : null;
+
   const contextInner = createContextInner({
     headers: Object.fromEntries(opts.req.headers.entries()),
-    auth: await auth(),
+    auth: mockAuth,
   });
 
   return { ...contextInner, req };

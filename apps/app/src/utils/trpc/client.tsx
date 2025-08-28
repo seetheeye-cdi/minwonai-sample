@@ -7,7 +7,6 @@ import type { AppRouter } from "@myapp/api";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 import { makeQueryClient } from "./query-client";
-import { useClerk } from "@clerk/nextjs";
 
 export const trpc = createTRPCReact<AppRouter>();
 let clientQueryClientSingleton: QueryClient;
@@ -50,8 +49,6 @@ export function TRPCProvider(
     children: React.ReactNode;
   }>
 ) {
-  const { signOut } = useClerk();
-
   // NOTE: Avoid useState when initializing the query client if you don't
   //       have a suspense boundary between this and the code that may
   //       suspend because React will throw away the client on the initial
@@ -59,10 +56,24 @@ export function TRPCProvider(
   const queryClient = getQueryClient();
   const [trpcClient] = useState(() => createClient());
 
+  // Mock sign out function when auth is skipped
+  const mockSignOut = async () => {
+    if (process.env.NEXT_PUBLIC_SKIP_AUTH === "true") {
+      console.log("Auth is skipped, mock sign out");
+      return;
+    }
+    // In production, redirect to login
+    window.location.href = "/sign-in";
+  };
+
   // 글로벌 에러 핸들링 설정
   queryClient.setDefaultOptions({
     queries: {
       retry: (failureCount, error) => {
+        // SKIP_AUTH가 true일 때는 UNAUTHORIZED 에러도 재시도
+        if (process.env.NEXT_PUBLIC_SKIP_AUTH === "true") {
+          return failureCount < 3;
+        }
         // UNAUTHORIZED 에러는 재시도하지 않음
         if (
           error instanceof TRPCClientError &&
@@ -75,9 +86,15 @@ export function TRPCProvider(
     },
     mutations: {
       onError: (error) => {
-        handleGlobalError(error, signOut);
+        if (process.env.NEXT_PUBLIC_SKIP_AUTH !== "true") {
+          handleGlobalError(error, mockSignOut);
+        }
       },
       retry: (failureCount, error) => {
+        // SKIP_AUTH가 true일 때는 UNAUTHORIZED 에러도 재시도
+        if (process.env.NEXT_PUBLIC_SKIP_AUTH === "true") {
+          return failureCount < 3;
+        }
         // UNAUTHORIZED 에러는 재시도하지 않음
         if (
           error instanceof TRPCClientError &&
@@ -101,6 +118,12 @@ export function TRPCProvider(
 
 // 글로벌 에러 핸들러 함수
 function handleGlobalError(error: unknown, signOut: () => Promise<void>) {
+  // SKIP_AUTH가 활성화되어 있으면 에러 핸들링 스킵
+  if (process.env.NEXT_PUBLIC_SKIP_AUTH === "true") {
+    console.log("Auth is skipped, ignoring auth errors");
+    return;
+  }
+  
   // TRPC 클라이언트 에러인지 확인
   if (error instanceof TRPCClientError) {
     const errorCode = error.data?.code;

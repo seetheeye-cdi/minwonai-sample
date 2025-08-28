@@ -16,8 +16,30 @@ export function SubscriptionProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const skipAuth = process.env.NEXT_PUBLIC_SKIP_AUTH === "true";
+  
+  // Mock subscription data when auth is skipped
+  if (skipAuth) {
+    const mockSubscription = {
+      id: "test_sub",
+      status: "active" as const,
+      planId: "test_plan",
+      plan: {
+        id: "test_plan",
+        name: "Test Plan",
+        features: [],
+      },
+    };
+    
+    return (
+      <SubscriptionContext.Provider value={{ subscription: mockSubscription as any }}>
+        {children}
+      </SubscriptionContext.Provider>
+    );
+  }
+  
   const [subscription] =
-    trpc.subscriptionRouter.getSubscription.useSuspenseQuery(undefined, {
+    trpc.subscription.getSubscription.useSuspenseQuery(undefined, {
       retry: 0,
     });
 

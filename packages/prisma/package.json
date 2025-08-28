@@ -1,17 +1,16 @@
 {
   "name": "@myapp/prisma",
   "version": "0.0.0",
-  "main": "./dist/index.js",
+  "main": "./index.ts",
   "types": "./index.ts",
   "exports": {
     ".": {
       "types": "./index.ts",
-      "zod": "./prisma/generated/zod/index.ts",
-      "default": "./dist/index.js"
+      "default": "./index.ts"
     }
   },
   "scripts": {
-    "build": "tsup index.ts",
+    "build": "echo 'No build needed for development'",
     "db:generate": "prisma generate",
     "db:migrate:diff": "prisma migrate diff",
     "db:migrate:deploy": "prisma migrate deploy",
@@ -21,7 +20,7 @@
     "db:prebuild": "npm run db:generate",
     "db:predev": "npm run db:generate",
     "db:push": "prisma db push",
-    "dev": "tsup index.ts --watch",
+    "dev": "echo 'No dev needed for development'",
     "format": "prisma format",
     "lint": "eslint .",
     "studio": "prisma studio",
