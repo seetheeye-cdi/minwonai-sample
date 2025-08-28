@@ -1,5 +1,5 @@
-export const GET_STARTED_LINK = process.env.NEXT_PUBLIC_APP_URL;
-export const SIGN_IN_LINK = process.env.NEXT_PUBLIC_APP_URL; // Placeholder: update for your app
+export const GET_STARTED_LINK = "https://minwonai-sample.vercel.app";
+export const SIGN_IN_LINK = "https://minwonai-sample.vercel.app"; // Updated to minwonai-sample
 
 export const DISCORD_LINK = "#"; // Placeholder: community link
 
