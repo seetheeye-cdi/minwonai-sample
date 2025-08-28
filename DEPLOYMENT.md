@@ -51,6 +51,12 @@ SENDGRID_API_KEY=...
 SENDGRID_FROM_EMAIL=noreply@your-domain.com
 ```
 
+### 8. AI Service (필수 - CivicAid)
+```
+OPENAI_API_KEY=sk-...
+OPENAI_MODEL=gpt-4o-mini
+```
+
 ## Vercel에서 환경 변수 설정하는 방법
 
 1. [Vercel Dashboard](https://vercel.com/dashboard)에 로그인

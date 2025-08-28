@@ -82,6 +82,13 @@ enum TicketUpdateType {
   CATEGORY_CHANGE
 }
 
+// Sentiment analysis enum
+enum Sentiment {
+  POSITIVE
+  NEUTRAL
+  NEGATIVE
+}
+
 enum SubscriptionPaymentMethod {
   CARD
   BANK_TRANSFER
@@ -243,7 +250,7 @@ model Ticket {
   // Ticket content
   content        String          @db.Text
   category       String?
-  sentiment      String?         // AI analyzed sentiment
+  sentiment      Sentiment?      // AI analyzed sentiment
   
   // Status and priority
   status         TicketStatus    @default(NEW)
@@ -261,11 +268,13 @@ model Ticket {
   repliedAt      DateTime?
   closedAt       DateTime?
   
-  // AI suggestions
-  aiSuggestedCategory    String?
-  aiSuggestedResponse    String?         @db.Text
+  // AI analysis results
+  aiSummary              String?         @db.Text // AI generated summary
+  aiDraftAnswer          String?         @db.Text // AI generated draft response
   aiSuggestedAssigneeId  String?
   aiConfidenceScore      Float?
+  aiNeedsManualReview    Boolean         @default(false)
+  aiErrorMessage         String?
   
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @default(now()) @updatedAt

@@ -1,8 +1,9 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { prisma, TicketStatus, TicketPriority } from "@myapp/prisma";
+import { prisma, TicketStatus, TicketPriority, Sentiment } from "@myapp/prisma";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { cuid2 } from "@myapp/utils";
+import { createClassifier } from "@myapp/ai";
 
 export const ticketRouter = createTRPCRouter({
   // Create a new ticket
@@ -26,6 +27,7 @@ export const ticketRouter = createTRPCRouter({
       }
 
       const ticketId = `tkt_${cuid2()}`;
+      const publicToken = cuid2();
       
       const ticket = await prisma.ticket.create({
         data: {
@@ -34,6 +36,7 @@ export const ticketRouter = createTRPCRouter({
           ...input,
           status: "NEW",
           priority: "NORMAL",
+          publicToken,
         },
       });
 
@@ -45,6 +48,23 @@ export const ticketRouter = createTRPCRouter({
           updateType: "STATUS_CHANGE",
           content: { from: null, to: "NEW" },
         },
+      });
+
+      // AI 분류 수행 (비동기, 실패해도 티켓 생성은 성공)
+      performAIClassification(ticketId, {
+        content: input.content,
+        citizenName: input.citizenName,
+        organizationId: ctx.organizationId,
+      }).catch((error) => {
+        console.error(`AI 분류 실패 (티켓 ${ticketId}):`, error);
+        // AI 분류 실패 시 수동 검토 플래그 설정
+        prisma.ticket.update({
+          where: { id: ticketId },
+          data: {
+            aiNeedsManualReview: true,
+            aiErrorMessage: error instanceof Error ? error.message : "AI 분류 실패",
+          },
+        }).catch(console.error);
       });
 
       return ticket;
@@ -423,3 +443,65 @@ export const ticketRouter = createTRPCRouter({
       return survey;
     }),
 });
+
+// AI 분류 수행 함수 (비동기)
+async function performAIClassification(
+  ticketId: string, 
+  request: { content: string; citizenName?: string; organizationId: string }
+) {
+  try {
+    const classifier = createClassifier();
+    const result = await classifier.classifyComplaint(request);
+
+    // AI 분류 결과로 티켓 업데이트
+    await prisma.ticket.update({
+      where: { id: ticketId },
+      data: {
+        category: result.category,
+        sentiment: result.sentiment as Sentiment,
+        priority: result.priority as TicketPriority,
+        aiSummary: result.summary,
+        aiConfidenceScore: result.confidence,
+        status: "CLASSIFIED",
+        // 담당자 배정 (추후 실제 사용자 매핑 로직 추가)
+        // assignedToId: result.suggestedAssigneeId,
+      },
+    });
+
+    // AI 답변 초안 생성 (신뢰도가 높은 경우만)
+    if (result.confidence > 0.7) {
+      const draftReply = await classifier.generateReplyDraft(
+        request.content,
+        result.category,
+        request.citizenName
+      );
+
+      await prisma.ticket.update({
+        where: { id: ticketId },
+        data: {
+          aiDraftAnswer: draftReply,
+        },
+      });
+    }
+
+    // 분류 완료 로그 추가
+    await prisma.ticketUpdate.create({
+      data: {
+        ticketId,
+        userId: null, // 시스템 생성
+        updateType: "STATUS_CHANGE",
+        content: {
+          message: `AI 분류 완료: ${result.category}`,
+          confidence: Math.round(result.confidence * 100),
+          category: result.category,
+          sentiment: result.sentiment,
+          priority: result.priority,
+        },
+      },
+    });
+
+  } catch (error) {
+    console.error("AI 분류 실패:", error);
+    throw error;
+  }
+}
