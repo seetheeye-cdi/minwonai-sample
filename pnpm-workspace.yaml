@@ -1,0 +1,14 @@
+packages:
+  - apps/*
+  - packages/*
+  - tooling/*
+ignoredBuiltDependencies:
+  - '@clerk/shared'
+  - '@parcel/watcher'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - '@sentry/cli'
+  - '@tailwindcss/oxide'
+  - esbuild
+  - prisma
+  - sharp

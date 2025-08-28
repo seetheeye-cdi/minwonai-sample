@@ -1,0 +1,117 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+Of course. As a senior technical architect, my goal is to distill the technical requirements into a clear, actionable blueprint that eliminates ambiguity and unnecessary complexity.
+
+Here is the revised, lean Technical Specification, designed for rapid MVP development.
+
+---
+
+### **Lean Technical Specification: CivicAid MVP**
+
+This document outlines the core technical architecture and implementation strategy for the CivicAid MVP, directly addressing the PRD requirements. The primary principle is to leverage the chosen stack's integrated features to maximize development speed and minimize dependencies.
+
+#### **1. Core Architecture & Stack**
+
+The system is a **Next.js monolithic application** using **Supabase** as the all-in-one backend (Database, Realtime, Storage, Edge Functions). Authentication is handled by **Clerk** for robust user and organization management.
+
+**Core Stack (Confirmed from PRD):**
+*   **Framework:** Next.js 15 (App Router)
+*   **Backend & DB:** Supabase (Postgres, Auth, Storage, Realtime, Edge Functions)
+*   **Authentication:** Clerk (Primary user management, orgs, SSO readiness)
+*   **UI:** shadcn/ui, lucide-react, @tanstack/react-query
+*   **Payments:** LemonSqueezy
+*   **Package Manager:** pnpm (monorepo)
+
+**Key Architectural Simplifications:**
+*   **NO `socket.io`:** We will use **Supabase Realtime Subscriptions** for all live UI updates (e.g., inbox, dashboard). This removes the need for a separate WebSocket server, reducing complexity and operational overhead.
+*   **NO `UploadThing`:** We will use **Supabase Storage** for handling file attachments, keeping all data within a single platform.
+
+#### **2. Key System Flows & Implementation**
+
+This section defines the critical data flows.
+
+**A. Complaint Ingestion & AI Processing (≤ 5s)**
+1.  A new complaint is submitted via a Next.js API Route.
+2.  The API route performs initial validation and saves the raw complaint to the `tickets` table in Supabase with a `status` of `new`.
+3.  A **Supabase Database Webhook** or **Edge Function** is triggered by this `INSERT` event.
+4.  The function sends the complaint text to the AI service (e.g., OpenAI API).
+5.  The function receives the `category`, `sentiment`, and `suggested_assignee_id` from the AI.
+6.  It updates the ticket record in Supabase with the AI-generated data and changes the `status` to `classified`. The initial "receipt confirmation" notification is triggered.
+
+**B. Notification Dispatch**
+1.  Changes to a ticket's `status` (e.g., `classified`, `replied`) or other key events trigger a database function.
+2.  This function inserts a job into a `notification_queue` table.
+3.  A dedicated **Supabase Edge Function**, running on a schedule or triggered by the queue, processes jobs.
+4.  It implements the PRD's channel priority:
+    *   Attempt to send via Kakao Alimtalk API.
+    *   If it fails or the user has no Kakao handle, send via SMS.
+    *   Log the delivery status (`sent`, `failed`, `channel_used`) back to the database.
+
+**C. Agent Workflow (Inbox & Reply)**
+1.  The agent's inbox UI uses `@tanstack/react-query` to fetch initial data.
+2.  It then establishes a **Supabase Realtime Subscription** to the `tickets` table (filtered for the agent's view by RLS).
+3.  Any new or updated ticket is pushed directly to the client, updating the UI without polling.
+4.  When an agent sends a reply, the client performs an API call. The backend saves the reply, updates the ticket `status` to `replied`, which in turn triggers the "Reply Sent" notification flow (B).
+
+**D. Public Timeline View**
+1.  When a ticket is created, a secure, non-guessable `public_token` (UUID) is generated and stored with the ticket.
+2.  The URL sent to citizens will be `/timeline/{public_token}`.
+3.  A Next.js page (`/timeline/[token]/page.tsx`) will use the token to fetch the specific ticket's history via a server-side query. **Row Level Security** will ensure this token can only access its associated ticket data.
+
+#### **3. Data Model (Core Supabase Schema)**
+
+A simplified schema is sufficient for the MVP.
+
+*   `tickets`
+    *   `id` (uuid, pk)
+    *   `created_at` (timestamp)
+    *   `organization_id` (fk)
+    *   `citizen_name` (text)
+    *   `citizen_contact` (jsonb, e.g., `{ "phone": "...", "email": "..." }`)
+    *   `content` (text)
+    *   `status` (enum: `new`, `classified`, `in_progress`, `replied`, `closed`)
+    *   `category` (text, nullable)
+    *   `priority` (enum: `normal`, `high`) - Derived from sentiment analysis.
+    *   `assigned_to_id` (fk, users, nullable)
+    *   `public_token` (uuid, unique)
+    *   `sla_due_at` (timestamp)
+
+*   `ticket_updates`
+    *   `id` (uuid, pk)
+    *   `ticket_id` (fk)
+    *   `user_id` (fk, nullable) - Null if system-generated update.
+    *   `update_type` (enum: `status_change`, `comment`, `reply_sent`)
+    *   `content` (jsonb)
+
+*   `satisfaction_surveys`
+    *   `id` (uuid, pk)
+    *   `ticket_id` (fk)
+    *   `rating` (int, 1-5)
+    *   `submitted_at` (timestamp)
+
+*   `users` and `organizations` will be primarily managed by **Clerk**, with corresponding public data synced to Supabase tables for relational integrity.
+
+#### **4. Key Technical Decisions & Risk Mitigation**
+
+*   **Authentication & Authorization:**
+    *   **Decision:** Clerk is the source of truth for users and organizations. A Clerk JWT will be passed to Supabase to authenticate API requests and enforce **Row Level Security (RLS)**.
+    *   **Implementation:** RLS policies are mandatory. The default policy is `DENY`. Policies will ensure a user can only see tickets belonging to their `organization_id`.
+
+*   **AI Service Integration:**
+    *   **Decision:** Abstract all AI calls into a single service module (`/packages/ai`). Use environment variables to define the provider and model.
+    *   **Risk:** AI misclassification or latency.
+    *   **Mitigation:**
+        1.  The UI **must** allow agents to manually override the category and priority.
+        2.  Log all manual corrections. This data will be used for future prompt-tuning or fine-tuning, but the re-training pipeline itself is **out of scope for the MVP**.
+        3.  Implement a simple 10-second timeout on AI API calls; if it fails, the ticket is marked `needs_manual_review`.
+
+*   **Security:**
+    *   **Decision:** The primary security layer is Supabase RLS. All API endpoints must perform server-side validation.
+    *   **Mitigation (Public Sector):** For the pilot, configure Supabase's network restrictions to allowlist IPs from the partner municipality's office network.
+
+*   **Dependencies:**
+    *   **Risk:** Kakao Alimtalk approval delay.
+    *   **Mitigation:** The notification module will be built with SMS as the primary, fully functional channel from day one. The Kakao provider can be enabled via a feature flag once approved. This ensures no development blockage.
