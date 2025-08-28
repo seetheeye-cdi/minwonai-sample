@@ -1,9 +1,16 @@
 "use client";
 
 import { createContext, ReactNode } from "react";
-import { useUser } from "@clerk/nextjs";
 
-export type LoadedUser = NonNullable<ReturnType<typeof useUser>["user"]>;
+export interface LoadedUser {
+  id: string;
+  email?: string;
+  username?: string;
+  firstName?: string;
+  lastName?: string;
+  fullName?: string;
+  imageUrl?: string;
+}
 
 interface LoadedAuthContextValue {
   user: LoadedUser;

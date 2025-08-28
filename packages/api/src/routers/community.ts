@@ -161,9 +161,10 @@ export const communityRouter = createTRPCRouter({
       // Trigger AI classification (async)
       try {
         const classifier = createClassifier();
-        const analysis = await classifier.classifyTicket({
+        const analysis = await classifier.classifyComplaint({
           content: input.content,
-          category: input.category,
+          citizenName: input.citizenName,
+          organizationId: input.organizationId,
         });
 
         await prisma.ticket.update({
@@ -182,12 +183,17 @@ export const communityRouter = createTRPCRouter({
       // Send notification to citizen
       try {
         const notificationService = new NotificationService();
-        await notificationService.sendTicketReceivedNotification({
+        await notificationService.queueNotification({
           ticketId,
+          type: "TICKET_RECEIVED",
           recipientName: input.citizenName,
           recipientPhone: input.citizenPhone,
           recipientEmail: input.citizenEmail,
-          publicToken,
+          templateData: {
+            ticketId,
+            publicToken,
+            timelineUrl: `${process.env.NEXT_PUBLIC_APP_URL}/timeline/${publicToken}`,
+          },
         });
       } catch (error) {
         console.error("Notification failed:", error);

@@ -685,11 +685,77 @@ export const ticketRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      // Redirect to new method
-      return ticketRouter.submitSatisfactionSurvey.mutation({
-        ...ctx,
-        input,
+      // Reuse the same logic instead of circular reference
+      const clientIP = ctx.headers?.['x-forwarded-for'] || 
+                       ctx.headers?.['x-real-ip'] || 
+                       ctx.headers?.['cf-connecting-ip'] ||
+                       'unknown';
+      const userAgent = ctx.headers?.['user-agent'] || 'unknown';
+      
+      const crypto = await import('crypto');
+      const fingerprint = crypto
+        .createHash('sha256')
+        .update(`${clientIP}:${userAgent}`)
+        .digest('hex');
+
+      const ticket = await prisma.ticket.findUnique({
+        where: { publicToken: input.ticketToken },
+        include: { survey: true },
       });
+
+      if (!ticket) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Ticket not found",
+        });
+      }
+
+      if (ticket.survey?.submittedAt) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "Survey already submitted",
+        });
+      }
+
+      const eligibleStatuses: TicketStatus[] = ["REPLIED", "CLOSED"];
+      if (!eligibleStatuses.includes(ticket.status)) {
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: "Cannot submit survey for this ticket status",
+        });
+      }
+
+      const survey = await prisma.satisfactionSurvey.upsert({
+        where: { ticketId: ticket.id },
+        create: {
+          id: `srv_${cuid2()}`,
+          ticketId: ticket.id,
+          rating: input.rating,
+          feedback: input.feedback,
+          submittedAt: new Date(),
+          responderFingerprint: fingerprint,
+        },
+        update: {
+          rating: input.rating,
+          feedback: input.feedback,
+          submittedAt: new Date(),
+          responderFingerprint: fingerprint,
+        },
+      });
+
+      await prisma.ticketUpdate.create({
+        data: {
+          ticketId: ticket.id,
+          updateType: "COMMENT",
+          content: { 
+            type: "SURVEY_SUBMITTED", 
+            rating: input.rating,
+            hasFeedback: Boolean(input.feedback),
+          },
+        },
+      });
+
+      return survey;
     }),
 
   // Get satisfaction statistics

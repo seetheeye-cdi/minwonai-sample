@@ -12,8 +12,8 @@ const serverEnvSchema = z.object({
   // Supabase
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
   
-  // Clerk Auth
-  CLERK_SECRET_KEY: z.string().min(1),
+  // Clerk Auth (Optional - being deprecated)
+  CLERK_SECRET_KEY: z.string().optional(),
   CLERK_WEBHOOK_SIGNING_SECRET: z.string().optional(),
   
   // AI Services
@@ -57,8 +57,8 @@ const clientEnvSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
   
-  // Clerk Auth
-  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
+  // Clerk Auth (Optional - being deprecated)
+  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().optional(),
   NEXT_PUBLIC_CLERK_SIGN_IN_URL: z.string().default("/auth/sign-in"),
   NEXT_PUBLIC_CLERK_SIGN_UP_URL: z.string().default("/auth/sign-up"),
   NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: z.string().default("/dashboard"),
@@ -179,7 +179,7 @@ if (!!process.env.SKIP_ENV_VALIDATION == false) {
             ? "❌ Attempted to access a server-side environment variable on the client"
             : `❌ Attempted to access server-side environment variable '${prop}' on the client`,
         );
-      return target[/** @type {keyof typeof target} */ (prop)];
+      return (target as any)[prop];
     },
   });
 }
