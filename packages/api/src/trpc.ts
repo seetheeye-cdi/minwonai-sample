@@ -96,6 +96,48 @@ export const createTRPCRouter = t.router;
 // export const publicProcedure = t.procedure.use(logging);
 
 const isAuthed = t.middleware(async ({ ctx, next }) => {
+  // TEMPORARY: Mock auth for testing
+  if (process.env.NODE_ENV === "development" && process.env.SKIP_AUTH === "true") {
+    // Create test user and organization if they don't exist
+    const testOrg = await prisma.organization.upsert({
+      where: { clerkOrgId: "test_clerk_org_id" },
+      update: {},
+      create: {
+        id: "org_test_001",
+        clerkOrgId: "test_clerk_org_id",
+        name: "테스트 조직",
+        slug: "test-org",
+        description: "CivicAid 테스트용 조직",
+      },
+    });
+
+    const testUser = await prisma.user.upsert({
+      where: { clerkId: "test_clerk_id" },
+      update: {},
+      create: {
+        id: "usr_test_001",
+        clerkId: "test_clerk_id",
+        email: "test@civicaid.com",
+        username: "testuser",
+        organizationId: testOrg.id,
+        role: "ADMIN",
+      },
+      include: {
+        organization: true,
+      },
+    });
+
+    return next({
+      ctx: {
+        ...ctx,
+        auth: { userId: testUser.clerkId, orgId: testOrg.clerkOrgId },
+        user: testUser,
+        organizationId: testOrg.id,
+      },
+    });
+  }
+
+  // Original auth logic
   if (!ctx.auth?.userId) {
     throw new TRPCError({
       code: "UNAUTHORIZED",

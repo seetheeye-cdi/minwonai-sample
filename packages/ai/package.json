@@ -19,6 +19,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.60.0",
     "openai": "^4.67.3",
     "zod": "^3.22.2"
   }

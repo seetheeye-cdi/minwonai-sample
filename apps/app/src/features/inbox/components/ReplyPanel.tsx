@@ -102,8 +102,8 @@ export function ReplyPanel({ ticket, onReplySuccess }: ReplyPanelProps) {
 
   return (
     <Card className="sticky top-6">
-      <div className="p-6">
-        <h2 className="text-lg font-semibold mb-4">{t("title")}</h2>
+      <div className="p-6 space-y-6">
+        <h2 className="text-lg font-semibold">{t("title")}</h2>
         
         {/* AI Error Alert */}
         {ticket.aiNeedsManualReview && (
@@ -115,16 +115,16 @@ export function ReplyPanel({ ticket, onReplySuccess }: ReplyPanelProps) {
           </Alert>
         )}
 
-        <Tabs defaultValue="draft" className="w-full">
+        <Tabs defaultValue="draft" className="w-full space-y-4">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="draft">{t("tabs.draft")}</TabsTrigger>
             <TabsTrigger value="templates">{t("tabs.templates")}</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="draft" className="space-y-4">
+          <TabsContent value="draft" className="space-y-6">
             {/* Tone Selection */}
-            <div>
-              <Label>{t("tone.label")}</Label>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">{t("tone.label")}</Label>
               <Select
                 value={selectedTone}
                 onValueChange={(value) => setSelectedTone(value as ToneType)}
@@ -162,8 +162,8 @@ export function ReplyPanel({ ticket, onReplySuccess }: ReplyPanelProps) {
             </Button>
 
             {/* Reply Text Editor */}
-            <div>
-              <Label>{t("replyText.label")}</Label>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">{t("replyText.label")}</Label>
               <Textarea
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
@@ -171,7 +171,7 @@ export function ReplyPanel({ ticket, onReplySuccess }: ReplyPanelProps) {
                 className="min-h-[200px]"
                 disabled={!canReply}
               />
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-2">
                 {t("replyText.hint")}
               </p>
             </div>
@@ -185,8 +185,8 @@ export function ReplyPanel({ ticket, onReplySuccess }: ReplyPanelProps) {
             </div>
           </TabsContent>
 
-          <TabsContent value="templates" className="space-y-4">
-            <div className="space-y-2">
+          <TabsContent value="templates" className="space-y-4 mt-4">
+            <div className="space-y-3">
               <Button
                 variant="outline"
                 className="w-full justify-start"
@@ -231,7 +231,7 @@ export function ReplyPanel({ ticket, onReplySuccess }: ReplyPanelProps) {
         <Button
           onClick={handleSendReply}
           disabled={!canReply || !replyText.trim() || sendReplyMutation.isPending}
-          className="w-full mt-4"
+          className="w-full"
         >
           {sendReplyMutation.isPending ? (
             <>
@@ -248,7 +248,7 @@ export function ReplyPanel({ ticket, onReplySuccess }: ReplyPanelProps) {
 
         {/* Status Info */}
         {!canReply && (
-          <Alert className="mt-4">
+          <Alert>
             <AlertDescription>
               {ticket.status === "CLOSED" && t("closedTicket")}
               {ticket.status === "REPLIED" && t("alreadyReplied")}

@@ -1,44 +1,35 @@
-import { AIClient } from "./client";
+import { AnthropicClient } from "./anthropic-client";
 import { 
   AIClassificationResult, 
   AIClassificationResultSchema, 
-  ClassificationRequest,
-  AssigneeMapping,
-  AIServiceConfig 
+  ClassificationRequest
 } from "./types";
 
 export class ComplaintClassifier {
-  private aiClient: AIClient;
+  private aiClient: AnthropicClient;
 
-  constructor(config: AIServiceConfig) {
-    this.aiClient = new AIClient(config);
+  constructor(apiKey?: string) {
+    this.aiClient = new AnthropicClient(apiKey);
   }
 
-  async classifyComplaint(request: ClassificationRequest): Promise<AIClassificationResult> {
+  async classify(
+    content: string,
+    citizenName?: string,
+    organizationId?: string
+  ): Promise<AIClassificationResult> {
     try {
-      // AI 분류 수행
-      const rawResult = await this.aiClient.classifyComplaint(
-        request.content,
-        request.citizenName
-      );
-
-      // 담당자 추천 로직
+      const result = await this.aiClient.classifyComplaint(content, citizenName);
+      
+      // 담당자 추천 로직 (선택사항)
       const suggestedAssigneeId = await this.suggestAssignee(
-        rawResult.category,
-        request.organizationId
+        result.category,
+        organizationId || ""
       );
 
-      // 결과 검증 및 변환
-      const result = AIClassificationResultSchema.parse({
-        category: rawResult.category,
-        sentiment: rawResult.sentiment,
-        priority: rawResult.priority,
+      return {
+        ...result,
         suggestedAssigneeId,
-        confidence: rawResult.confidence || 0.8,
-        summary: rawResult.summary,
-      });
-
-      return result;
+      };
     } catch (error) {
       console.error("민원 분류 실패:", error);
       
@@ -47,11 +38,15 @@ export class ComplaintClassifier {
         category: "기타",
         sentiment: "NEUTRAL",
         priority: "NORMAL",
-        confidence: 0.0,
+        confidenceScore: 0.0,
         summary: "AI 분류 실패 - 수동 검토 필요",
-        suggestedAssigneeId: undefined,
+        draftAnswer: "민원을 접수했습니다. 담당자가 확인 후 연락드리겠습니다.",
       };
     }
+  }
+
+  async classifyComplaint(request: ClassificationRequest): Promise<AIClassificationResult> {
+    return this.classify(request.content, request.citizenName, request.organizationId);
   }
 
   private async suggestAssignee(
@@ -63,14 +58,15 @@ export class ComplaintClassifier {
       // 현재는 카테고리별 기본 매핑 로직으로 구현
       const categoryAssigneeMap: Record<string, string[]> = {
         "환경/미화": ["env_team"],
-        "교통": ["traffic_team"],
+        "교통/도로": ["traffic_team"],
         "건설/도로": ["construction_team"],
         "복지": ["welfare_team"],
         "세무/재정": ["finance_team"],
         "문화/체육": ["culture_team"],
         "교육": ["education_team"],
         "안전": ["safety_team"],
-        "행정": ["admin_team"],
+        "행정/민원": ["admin_team"],
+        "칭찬/감사": ["general_team"],
         "기타": ["general_team"],
       };
 
@@ -104,55 +100,34 @@ export class ComplaintClassifier {
     tonePrompt?: string
   ): Promise<string> {
     try {
-      const systemPrompt = `당신은 한국의 지방자치단체 민원 담당자입니다. 
-시민의 민원에 대해 정중하고 전문적인 답변 초안을 작성해주세요.
-${tonePrompt ? `답변은 ${tonePrompt} 작성해주세요.` : ''}
-
-답변 작성 원칙:
-1. 정중하고 공손한 어조 사용
-2. 구체적이고 실용적인 정보 제공
-3. 필요시 관련 부서나 연락처 안내
-4. 처리 절차나 소요 시간 명시
-5. 추가 문의 방법 안내
-
-답변은 한국어로 작성하며, 200-300자 내외로 작성해주세요.`;
-
-      const userPrompt = `카테고리: ${category}
-민원인: ${citizenName || "시민"}
-민원 내용: ${ticketContent}
-
-위 민원에 대한 답변 초안을 작성해주세요.`;
-
-      const response = await this.aiClient.openai.chat.completions.create({
-        model: this.aiClient.config.model,
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
-        ],
-        temperature: 0.3,
-        max_tokens: 400,
-      });
-
-      return response.choices[0]?.message?.content || "답변 생성 실패";
+      return await this.aiClient.generateReplyDraftWithTone(
+        ticketContent, 
+        category, 
+        citizenName, 
+        tonePrompt
+      );
     } catch (error) {
       console.error("톤 조정 답변 초안 생성 실패:", error);
       return "답변 초안을 생성할 수 없습니다. 수동으로 작성해 주세요.";
     }
   }
+
+  async generateDraftResponse(
+    ticketContent: string,
+    category: string,
+    citizenName?: string
+  ): Promise<string> {
+    return this.generateReplyDraft(ticketContent, category, citizenName);
+  }
 }
 
 // 기본 설정으로 분류기 인스턴스 생성
 export function createClassifier(apiKey?: string): ComplaintClassifier {
-  const config: AIServiceConfig = {
-    apiKey: apiKey || process.env.OPENAI_API_KEY || "",
-    model: process.env.OPENAI_MODEL || "gpt-4o-mini",
-    timeout: 10000, // 10초
-    maxRetries: 2,
-  };
-
-  if (!config.apiKey) {
-    throw new Error("OpenAI API 키가 설정되지 않았습니다.");
+  const key = apiKey || process.env.ANTHROPIC_API_KEY;
+  
+  if (!key) {
+    console.warn("Anthropic API 키가 설정되지 않았습니다. AI 기능이 제한됩니다.");
   }
 
-  return new ComplaintClassifier(config);
+  return new ComplaintClassifier(key);
 }
