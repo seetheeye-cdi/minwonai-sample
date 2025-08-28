@@ -16,6 +16,7 @@
   "dependencies": {
     "@myapp/ai": "workspace:*",
     "@myapp/http-client": "workspace:*",
+    "@myapp/notification": "workspace:*",
     "@myapp/prisma": "workspace:*",
     "@myapp/utils": "workspace:*",
     "@sendgrid/mail": "^8.1.5",

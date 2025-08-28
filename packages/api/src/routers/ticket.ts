@@ -4,6 +4,7 @@ import { prisma, TicketStatus, TicketPriority, Sentiment } from "@myapp/prisma";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { cuid2 } from "@myapp/utils";
 import { createClassifier } from "@myapp/ai";
+import { NotificationService } from "@myapp/notification";
 
 export const ticketRouter = createTRPCRouter({
   // Create a new ticket
@@ -65,6 +66,23 @@ export const ticketRouter = createTRPCRouter({
             aiErrorMessage: error instanceof Error ? error.message : "AI 분류 실패",
           },
         }).catch(console.error);
+      });
+
+      // Queue notification for ticket received
+      const notificationService = new NotificationService();
+      await notificationService.queueNotification({
+        ticketId: ticket.id,
+        type: "TICKET_RECEIVED",
+        recipientName: input.citizenName,
+        recipientPhone: input.citizenPhone,
+        recipientEmail: input.citizenEmail,
+        templateData: {
+          ticketId: ticket.id,
+          createdAt: new Date().toLocaleString("ko-KR"),
+          timelineUrl: `${process.env.NEXT_PUBLIC_APP_URL}/timeline/${publicToken}`,
+        },
+      }).catch((error) => {
+        console.error(`알림 큐 생성 실패 (티켓 ${ticketId}):`, error);
       });
 
       return ticket;
@@ -350,7 +368,22 @@ export const ticketRouter = createTRPCRouter({
         return updatedTicket;
       });
 
-      // TODO: Send actual notification via Kakao/SMS/Email
+      // Send notification for reply
+      const notificationService = new NotificationService();
+      await notificationService.queueNotification({
+        ticketId: result.id,
+        type: "TICKET_REPLIED",
+        recipientName: result.citizenName,
+        recipientPhone: result.citizenPhone || undefined,
+        recipientEmail: result.citizenEmail || undefined,
+        templateData: {
+          ticketId: result.id,
+          replyText: input.replyText,
+          timelineUrl: `${process.env.NEXT_PUBLIC_APP_URL}/timeline/${result.publicToken}`,
+        },
+      }).catch((error) => {
+        console.error(`알림 큐 생성 실패 (티켓 ${result.id}):`, error);
+      });
 
       return result;
     }),
@@ -533,7 +566,6 @@ async function performAIClassification(
         sentiment: result.sentiment as Sentiment,
         priority: result.priority as TicketPriority,
         aiSummary: result.summary,
-        aiConfidenceScore: result.confidence,
         status: "CLASSIFIED",
         // 담당자 배정 (추후 실제 사용자 매핑 로직 추가)
         // assignedToId: result.suggestedAssigneeId,

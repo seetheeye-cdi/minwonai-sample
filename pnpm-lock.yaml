@@ -44,7 +44,7 @@ importers:
     dependencies:
       '@clerk/nextjs':
         specifier: ^6.28.1
-        version: 6.31.6(next@15.4.5(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 6.31.6(next@15.4.5(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@hookform/resolvers':
         specifier: ^5.2.1
         version: 5.2.1(react-hook-form@7.62.0(react@19.1.0))
@@ -273,6 +273,9 @@ importers:
       '@myapp/http-client':
         specifier: workspace:*
         version: link:../http-client
+      '@myapp/notification':
+        specifier: workspace:*
+        version: link:../notification
       '@myapp/prisma':
         specifier: workspace:*
         version: link:../prisma
@@ -303,7 +306,7 @@ importers:
     devDependencies:
       '@clerk/nextjs':
         specifier: ^6.20.1
-        version: 6.31.6(next@15.4.5(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 6.31.6(next@15.4.5(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@myapp/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint-config
@@ -343,6 +346,37 @@ importers:
         version: 9.34.0(jiti@2.5.1)
       typescript:
         specifier: ^5.8.3
+        version: 5.9.2
+
+  packages/notification:
+    dependencies:
+      '@myapp/prisma':
+        specifier: workspace:*
+        version: link:../prisma
+      '@myapp/utils':
+        specifier: workspace:*
+        version: link:../utils
+      '@sendgrid/mail':
+        specifier: ^8.1.4
+        version: 8.1.5
+      axios:
+        specifier: ^1.7.9
+        version: 1.11.0
+      zod:
+        specifier: ^3.24.1
+        version: 3.25.76
+    devDependencies:
+      '@myapp/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint-config
+      '@types/node':
+        specifier: ^22.10.6
+        version: 22.18.0
+      eslint:
+        specifier: ^9.19.0
+        version: 9.34.0(jiti@2.5.1)
+      typescript:
+        specifier: ^5.7.3
         version: 5.9.2
 
   packages/prisma:
@@ -6035,7 +6069,7 @@ snapshots:
       react-dom: 19.1.0(react@19.1.0)
       tslib: 2.8.1
 
-  '@clerk/nextjs@6.31.6(next@15.4.5(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@clerk/nextjs@6.31.6(next@15.4.5(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@clerk/backend': 2.10.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@clerk/clerk-react': 5.45.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)

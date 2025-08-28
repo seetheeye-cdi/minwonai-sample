@@ -55,6 +55,14 @@ SENDGRID_FROM_EMAIL=noreply@your-domain.com
 ```
 OPENAI_API_KEY=sk-...
 OPENAI_MODEL=gpt-4o-mini
+ANTHROPIC_API_KEY=sk-ant-...
+```
+
+### 9. SMS Service (SMS.to)
+```
+SMS_TO_API_KEY=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+SMS_TO_SENDER_ID=minwonai
+SMS_TO_BASE_URL=https://api.sms.to
 ```
 
 ## Vercel에서 환경 변수 설정하는 방법

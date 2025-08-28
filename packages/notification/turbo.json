@@ -1,0 +1,12 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "lint": {
+      "outputs": []
+    },
+    "typecheck": {
+      "dependsOn": ["^typecheck"],
+      "outputs": []
+    }
+  }
+}

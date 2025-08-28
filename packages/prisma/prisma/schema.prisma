@@ -89,6 +89,28 @@ enum Sentiment {
   NEGATIVE
 }
 
+enum NotificationChannel {
+  KAKAO
+  SMS
+  EMAIL
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+  DELIVERED
+}
+
+enum NotificationType {
+  TICKET_RECEIVED     // 접수 확인
+  TICKET_ASSIGNED     // 담당자 지정
+  TICKET_REPLIED      // 답변 완료
+  TICKET_CLOSED       // 처리 완료
+  SLA_WARNING         // SLA 임박
+  SATISFACTION_REQUEST // 만족도 요청
+}
+
 enum SubscriptionPaymentMethod {
   CARD
   BANK_TRANSFER
@@ -281,6 +303,7 @@ model Ticket {
   
   updates        TicketUpdate[]
   survey         SatisfactionSurvey?
+  notifications  NotificationQueue[]
   
   @@index([organizationId, status])
   @@index([assignedToId, status])
@@ -328,4 +351,69 @@ model SatisfactionSurvey {
   
   @@index([rating])
   @@index([submittedAt])
+}
+
+model NotificationQueue {
+  id                String              @id @default(cuid())
+  ticketId          String
+  ticket            Ticket              @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  type              NotificationType
+  recipientPhone    String?
+  recipientEmail    String?
+  recipientName     String
+  
+  // Template data
+  templateData      Json                // Dynamic data for template
+  
+  // Channel priority
+  preferredChannel  NotificationChannel
+  currentChannel    NotificationChannel?
+  
+  // Status tracking
+  status            NotificationStatus  @default(PENDING)
+  attempts          Int                 @default(0)
+  maxAttempts       Int                 @default(3)
+  
+  // Scheduling
+  scheduledAt       DateTime            @default(now())
+  sentAt            DateTime?
+  deliveredAt       DateTime?
+  failedAt          DateTime?
+  errorMessage      String?
+  
+  // Metadata
+  metadata          Json?               // Channel-specific response data
+  
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  logs              NotificationLog[]
+
+  @@index([ticketId])
+  @@index([status, scheduledAt])
+  @@index([type])
+}
+
+model NotificationLog {
+  id                String              @id @default(cuid())
+  queueId           String
+  queue             NotificationQueue   @relation(fields: [queueId], references: [id], onDelete: Cascade)
+  
+  channel           NotificationChannel
+  status            NotificationStatus
+  
+  // Request/Response data
+  requestData       Json?               // What was sent
+  responseData      Json?               // What was received
+  errorMessage      String?
+  
+  // Timing
+  attemptNumber     Int
+  sentAt            DateTime
+  responseAt        DateTime?
+  
+  createdAt         DateTime            @default(now())
+
+  @@index([queueId])
+  @@index([sentAt])
 }
