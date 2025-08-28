@@ -19,6 +19,10 @@ export {
   TooltipProvider,
 } from "./components/tooltip";
 export { Toaster } from "./components/sonner";
+export { Alert, AlertDescription, AlertTitle } from "./components/alert";
+export { Skeleton } from "./components/skeleton";
+export { Textarea } from "./components/textarea";
+export { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/tabs";
 export { Slider } from "./components/slider";
 export {
   Select,
@@ -33,6 +37,9 @@ export {
   SelectScrollDownButton,
 } from "./components/select";
 export { Separator } from "./components/separator";
+export { Progress } from "./components/progress";
+export { RadioGroup, RadioGroupItem } from "./components/radio-group";
+export { Label } from "./components/label";
 export {
   Table,
   TableHeader,
