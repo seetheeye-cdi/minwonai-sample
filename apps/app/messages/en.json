@@ -190,5 +190,79 @@
       "high": "High",
       "urgent": "Urgent"
     }
+  },
+  "TicketDetailPage": {
+    "title": "Ticket #{id}",
+    "createdAt": "Created: {date}",
+    "error": "Failed to load ticket",
+    "notFound": "Ticket not found",
+    "citizenInfo": {
+      "title": "Citizen Information",
+      "name": "Name",
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address"
+    },
+    "content": {
+      "title": "Ticket Content",
+      "category": "Category",
+      "description": "Description",
+      "aiSummary": "AI Summary",
+      "confidence": "Confidence: {score}%"
+    },
+    "updates": {
+      "title": "Activity History",
+      "system": "System",
+      "statusChange": "Status changed",
+      "comment": "Comment added",
+      "replySent": "Reply sent",
+      "assignmentChange": "Assignment changed",
+      "priorityChange": "Priority changed",
+      "categoryChange": "Category changed"
+    }
+  },
+  "ReplyPanel": {
+    "title": "Reply",
+    "tabs": {
+      "draft": "AI Draft",
+      "templates": "Templates"
+    },
+    "tone": {
+      "label": "Reply Tone",
+      "formal": "Formal",
+      "friendly": "Friendly",
+      "empathetic": "Empathetic",
+      "direct": "Direct"
+    },
+    "generateDraft": "Generate AI Draft",
+    "generating": "Generating...",
+    "replyText": {
+      "label": "Reply Content",
+      "placeholder": "Enter your reply...",
+      "hint": "This reply will be sent to the citizen. Please write carefully."
+    },
+    "characterCount": "{count} characters",
+    "longReply": "Reply is too long",
+    "sendReply": "Send Reply",
+    "sending": "Sending...",
+    "sendSuccess": "Reply sent successfully",
+    "sendError": "Failed to send reply: {error}",
+    "generateSuccess": "AI draft generated successfully",
+    "generateError": "Failed to generate AI draft: {error}",
+    "emptyReplyError": "Please enter reply content",
+    "closedTicket": "Cannot reply to closed tickets",
+    "alreadyReplied": "This ticket has already been replied to",
+    "aiError": "AI Classification Error",
+    "unknownError": "Unknown error",
+    "templates": {
+      "receiptTitle": "Receipt Confirmation",
+      "receipt": "Hello. Your complaint has been successfully received. We will process it and contact you as soon as possible. Thank you.",
+      "inProgressTitle": "In Progress",
+      "inProgress": "Hello. Your complaint is currently being processed. Please wait a moment and we will inform you of the results.",
+      "needMoreInfoTitle": "Need More Information",
+      "needMoreInfo": "Hello. We need additional information to process your complaint. Please provide more details and we will process it quickly.",
+      "resolvedTitle": "Resolved",
+      "resolved": "Hello. Your complaint has been resolved. If you have any further questions, please feel free to contact us. Thank you."
+    }
   }
 }

@@ -2,8 +2,8 @@ import OpenAI from "openai";
 import { AIServiceConfig } from "./types";
 
 export class AIClient {
-  private openai: OpenAI;
-  private config: AIServiceConfig;
+  public openai: OpenAI;
+  public config: AIServiceConfig;
 
   constructor(config: AIServiceConfig) {
     this.config = config;

@@ -401,6 +401,78 @@ export const ticketRouter = createTRPCRouter({
       return ticket;
     }),
 
+  // Generate AI draft reply
+  generateAIDraft: protectedProcedure
+    .input(
+      z.object({
+        ticketId: z.string(),
+        tone: z.enum(["formal", "friendly", "empathetic", "direct"]).optional(),
+        additionalPrompt: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (!ctx.organizationId) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Organization required",
+        });
+      }
+
+      const ticket = await prisma.ticket.findFirst({
+        where: {
+          id: input.ticketId,
+          organizationId: ctx.organizationId,
+        },
+      });
+
+      if (!ticket) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Ticket not found",
+        });
+      }
+
+      try {
+        const classifier = createClassifier();
+        
+        // 톤 조정을 위한 추가 프롬프트 구성
+        let tonePrompt = "";
+        if (input.tone) {
+          const toneMap = {
+            formal: "공식적이고 정중한 어조로",
+            friendly: "친근하고 따뜻한 어조로",
+            empathetic: "공감하고 이해하는 어조로",
+            direct: "간결하고 명확한 어조로",
+          };
+          tonePrompt = toneMap[input.tone];
+        }
+
+        // AI 답변 초안 생성
+        const draft = await classifier.generateReplyDraftWithTone(
+          ticket.content,
+          ticket.category || "미분류",
+          ticket.citizenName,
+          tonePrompt
+        );
+
+        // 생성된 초안을 DB에 저장 (선택사항)
+        await prisma.ticket.update({
+          where: { id: input.ticketId },
+          data: {
+            aiDraftAnswer: draft,
+          },
+        });
+
+        return { draft };
+      } catch (error) {
+        console.error("AI draft generation failed:", error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to generate AI draft",
+        });
+      }
+    }),
+
   // Submit satisfaction survey
   submitSurvey: publicProcedure
     .input(

@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { formatDistanceToNow } from "date-fns";
 import { ko, enUS } from "date-fns/locale";
 import { useLocale } from "next-intl";
-import { Clock, MessageSquare, User, AlertTriangle } from "lucide-react";
+import { Clock, MessageSquare, User, AlertTriangle, ChevronRight } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -20,6 +20,7 @@ import { Skeleton } from "@myapp/ui/components/skeleton";
 import { Alert, AlertDescription } from "@myapp/ui/components/alert";
 import { TicketStatusBadge } from "./TicketStatusBadge";
 import { TicketPriorityBadge } from "./TicketPriorityBadge";
+import { useRouter } from "@/i18n/navigation";
 import type { TicketListItem } from "../types";
 
 interface TicketListProps {
@@ -34,6 +35,7 @@ export function TicketList({ tickets, isLoading, error, total, hasMore }: Ticket
   const t = useTranslations("InboxPage.ticketList");
   const locale = useLocale();
   const dateLocale = locale === "ko" ? ko : enUS;
+  const router = useRouter();
 
   if (error) {
     return (
@@ -118,6 +120,7 @@ export function TicketList({ tickets, isLoading, error, total, hasMore }: Ticket
                 <TableHead>{t("columns.sla")}</TableHead>
                 <TableHead>{t("columns.created")}</TableHead>
                 <TableHead className="w-[50px]">{t("columns.updates")}</TableHead>
+                <TableHead className="w-[50px]"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -125,7 +128,11 @@ export function TicketList({ tickets, isLoading, error, total, hasMore }: Ticket
                 const slaStatus = getSlaStatus(ticket.slaDueAt);
                 
                 return (
-                  <TableRow key={ticket.id} className="cursor-pointer hover:bg-muted/50">
+                  <TableRow 
+                    key={ticket.id} 
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => router.push(`/inbox/${ticket.id}`)}
+                  >
                     <TableCell className="font-mono text-xs">
                       {ticket.id.slice(-8)}
                     </TableCell>
@@ -197,6 +204,18 @@ export function TicketList({ tickets, isLoading, error, total, hasMore }: Ticket
                           {ticket._count.updates}
                         </Badge>
                       )}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/inbox/${ticket.id}`);
+                        }}
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 );

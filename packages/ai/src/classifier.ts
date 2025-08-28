@@ -96,6 +96,49 @@ export class ComplaintClassifier {
       return "답변 초안을 생성할 수 없습니다. 수동으로 작성해 주세요.";
     }
   }
+
+  async generateReplyDraftWithTone(
+    ticketContent: string,
+    category: string,
+    citizenName?: string,
+    tonePrompt?: string
+  ): Promise<string> {
+    try {
+      const systemPrompt = `당신은 한국의 지방자치단체 민원 담당자입니다. 
+시민의 민원에 대해 정중하고 전문적인 답변 초안을 작성해주세요.
+${tonePrompt ? `답변은 ${tonePrompt} 작성해주세요.` : ''}
+
+답변 작성 원칙:
+1. 정중하고 공손한 어조 사용
+2. 구체적이고 실용적인 정보 제공
+3. 필요시 관련 부서나 연락처 안내
+4. 처리 절차나 소요 시간 명시
+5. 추가 문의 방법 안내
+
+답변은 한국어로 작성하며, 200-300자 내외로 작성해주세요.`;
+
+      const userPrompt = `카테고리: ${category}
+민원인: ${citizenName || "시민"}
+민원 내용: ${ticketContent}
+
+위 민원에 대한 답변 초안을 작성해주세요.`;
+
+      const response = await this.aiClient.openai.chat.completions.create({
+        model: this.aiClient.config.model,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt },
+        ],
+        temperature: 0.3,
+        max_tokens: 400,
+      });
+
+      return response.choices[0]?.message?.content || "답변 생성 실패";
+    } catch (error) {
+      console.error("톤 조정 답변 초안 생성 실패:", error);
+      return "답변 초안을 생성할 수 없습니다. 수동으로 작성해 주세요.";
+    }
+  }
 }
 
 // 기본 설정으로 분류기 인스턴스 생성
