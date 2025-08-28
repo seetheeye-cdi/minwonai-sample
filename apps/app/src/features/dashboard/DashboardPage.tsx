@@ -19,21 +19,22 @@ import {
   TableCell,
 } from "@myapp/ui/components/table";
 import { Badge } from "@myapp/ui/components/badge";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent,
-} from "@myapp/ui/components/chart";
-import {
-  LineChart,
-  Line,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  ResponsiveContainer,
-} from "recharts";
+// Chart components temporarily disabled - will be implemented with recharts later
+// import {
+//   ChartContainer,
+//   ChartTooltip,
+//   ChartTooltipContent,
+//   ChartLegend,
+//   ChartLegendContent,
+// } from "@myapp/ui/components/chart";
+// import {
+//   LineChart,
+//   Line,
+//   CartesianGrid,
+//   XAxis,
+//   YAxis,
+//   ResponsiveContainer,
+// } from "recharts";
 
 type CustomerRow = {
   id: string;
@@ -136,31 +137,10 @@ export function DashboardPage() {
             <CardDescription>FY 2025</CardDescription>
           </CardHeader>
           <CardContent>
-            <ChartContainer
-              config={{
-                revenue: {
-                  label: t("metrics.revenue"),
-                  color: "hsl(var(--chart-1))",
-                },
-              }}
-            >
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={REVENUE_DATA} margin={{ left: 4, right: 12 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" tickLine={false} axisLine={false} />
-                  <YAxis tickLine={false} axisLine={false} />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <ChartLegend content={<ChartLegendContent />} />
-                  <Line
-                    type="monotone"
-                    dataKey="revenue"
-                    stroke="var(--color-revenue)"
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </ChartContainer>
+            {/* Chart temporarily disabled - will be implemented with recharts later */}
+            <div className="aspect-auto h-[300px] w-full flex items-center justify-center text-muted-foreground">
+              Chart visualization will be enabled after recharts integration
+            </div>
           </CardContent>
         </Card>
 
