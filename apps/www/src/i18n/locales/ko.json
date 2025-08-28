@@ -1,8 +1,8 @@
 {
   "common": {
-    "getStarted": "무료로 시작하기",
+    "getStarted": "무료 체험 시작하기",
     "signIn": "로그인",
-    "community": "커뮤니티"
+    "community": "파일럿 문의"
   },
   "header": {
     "home": "홈",
@@ -12,28 +12,28 @@
     "menuOpen": "메뉴 열기"
   },
   "hero": {
-    "badge": "템플릿",
-    "title": "Describe\nYour Service",
-    "description": "서비스의 핵심 가치를 간단히 적어주세요.\n한두 줄이면 충분합니다.",
-    "imageAlt": "제품 미리보기",
-    "tutorial": "튜토리얼 보기"
+    "badge": "AI 기반 민원 처리 솔루션",
+    "title": "민원 업무,\n이제 AI가 도와드립니다",
+    "description": "AI 자동 분류와 답변 생성으로 전화·문자 안내 업무를 50% 이상 줄여드립니다.\n민원 담당자의 업무 효율을 획기적으로 개선하는 스마트한 솔루션입니다.",
+    "imageAlt": "CivicAid 대시보드 미리보기",
+    "tutorial": "데모 영상 보기"
   },
   "solution": {
     "sectionTitle": "솔루션",
-    "title": "핵심 베네핏을\n간단히 설명하세요",
-    "description": "제품이 어떻게 문제를 해결하는지 1~2문장으로 요약하세요.",
+    "title": "민원 처리 시간을\n30% 단축시켜드립니다",
+    "description": "AI가 민원을 자동 분류하고 답변 초안을 생성해 담당자는 검토와 발송에만 집중할 수 있습니다.",
     "features": {
       "prd": {
-        "title": "기능 A",
-        "description": "간단한 기능 설명을 적어주세요."
+        "title": "AI 자동 분류 및 배정",
+        "description": "접수된 민원을 5초 이내에 자동 분류하고 적절한 담당자에게 즉시 배정합니다."
       },
       "plan": {
-        "title": "기능 B",
-        "description": "간단한 기능 설명을 적어주세요."
+        "title": "AI 답변 초안 생성",
+        "description": "카테고리별 템플릿과 감정 분석을 기반으로 최적화된 답변 초안을 1클릭으로 생성합니다."
       },
       "mcp": {
-        "title": "기능 C",
-        "description": "간단한 기능 설명을 적어주세요."
+        "title": "멀티채널 자동 알림",
+        "description": "카카오톡, SMS, 이메일로 진행 상황을 자동 안내해 전화 문의를 획기적으로 줄입니다."
       }
     }
   },
@@ -190,7 +190,7 @@
     }
   },
   "footer": {
-    "tagline": "AI와 함께하는 체계적인 프로젝트 관리",
+    "tagline": "AI로 혁신하는 민원 처리의 미래",
     "product": {
       "title": "제품",
       "features": "기능",
@@ -215,29 +215,29 @@
       "privacy": "개인정보처리방침",
       "terms": "이용약관"
     },
-    "copyright": "© 2025 ProductName. All rights reserved."
+    "copyright": "© 2025 CivicAid. All rights reserved."
   },
   "finalCTA": {
-    "title": "시작할 준비 되셨나요?",
-    "description": "짧고 명확한 클로징 카피를 넣어주세요.",
-    "cta": "시작하기",
+    "title": "민원 업무 효율화, 지금 시작하세요",
+    "description": "군포시와 서대문구에서 검증된 AI 민원 처리 솔루션을 무료로 체험해보세요.",
+    "cta": "무료 체험 시작하기",
     "benefits": {
       "freeAccess": {
-        "title": "혜택 A",
-        "description": "이 혜택에 대한 짧은 설명."
+        "title": "4주 무료 파일럿",
+        "description": "실제 업무 환경에서 효과를 직접 확인하세요."
       },
       "limitedSpots": {
-        "title": "혜택 B",
-        "description": "이 혜택에 대한 짧은 설명."
+        "title": "전담 지원팀",
+        "description": "도입부터 안정화까지 전문가가 함께합니다."
       },
       "earlyAdopter": {
-        "title": "혜택 C",
-        "description": "이 혜택에 대한 짧은 설명."
+        "title": "즉시 50% 업무 감소",
+        "description": "전화·문자 안내 업무를 절반으로 줄여드립니다."
       }
     }
   },
   "metadata": {
-    "title": "ProductName | AI Product Manager",
-    "description": "체계적인 바이브코딩을 돕는 AI PM"
+    "title": "CivicAid | AI 기반 민원 처리 솔루션",
+    "description": "AI 자동 분류와 답변 생성으로 민원 처리 시간을 30% 단축시켜드리는 스마트 솔루션"
   }
 }

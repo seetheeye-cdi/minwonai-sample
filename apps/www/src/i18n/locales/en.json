@@ -1,8 +1,8 @@
 {
   "common": {
-    "getStarted": "Get Started",
+    "getStarted": "Start Free Trial",
     "signIn": "Sign in",
-    "community": "Community"
+    "community": "Request Pilot"
   },
   "header": {
     "home": "Home",
@@ -12,28 +12,28 @@
     "menuOpen": "Open menu"
   },
   "hero": {
-    "badge": "Template",
-    "title": "Describe\nYour Service",
-    "description": "Write a concise value proposition.\nOne or two lines is enough.",
-    "imageAlt": "Product preview",
-    "tutorial": "Watch Tutorial"
+    "badge": "AI-Powered Civil Complaint Solution",
+    "title": "Handle Complaints Smarter,\nNot Harder",
+    "description": "Reduce manual phone and text notifications by 50% with AI-powered classification and response generation.\nThe smart solution that revolutionizes civil complaint management.",
+    "imageAlt": "CivicAid Dashboard Preview",
+    "tutorial": "Watch Demo"
   },
   "solution": {
     "sectionTitle": "Solution",
-    "title": "Explain Your\nKey Benefits",
-    "description": "Use 1–2 sentences to describe how your product solves the problem.",
+    "title": "Reduce Processing Time\nby 30%",
+    "description": "AI automatically classifies complaints and generates draft responses, allowing staff to focus on review and delivery.",
     "features": {
       "prd": {
-        "title": "Feature One",
-        "description": "Short description for feature one."
+        "title": "AI Auto Classification & Assignment",
+        "description": "Automatically classify incoming complaints within 5 seconds and instantly assign to appropriate staff."
       },
       "plan": {
-        "title": "Feature Two",
-        "description": "Short description for feature two."
+        "title": "AI Draft Response Generation",
+        "description": "Generate optimized response drafts with one click based on category templates and sentiment analysis."
       },
       "mcp": {
-        "title": "Feature Three",
-        "description": "Short description for feature three."
+        "title": "Multi-channel Auto Notifications",
+        "description": "Automatically notify progress via KakaoTalk, SMS, and email, dramatically reducing phone inquiries."
       }
     }
   },
@@ -190,7 +190,7 @@
     }
   },
   "footer": {
-    "tagline": "All in One Vibe Coding PM",
+    "tagline": "The Future of Civil Complaint Management with AI",
     "product": {
       "title": "Product",
       "features": "Features",
@@ -215,29 +215,29 @@
       "privacy": "Privacy Policy",
       "terms": "Terms of Service"
     },
-    "copyright": "© 2025 ProductName. All rights reserved."
+    "copyright": "© 2025 CivicAid. All rights reserved."
   },
   "finalCTA": {
-    "title": "Ready to Get Started?",
-    "description": "Add a short, encouraging closing statement.",
-    "cta": "Get Started",
+    "title": "Transform Your Complaint Management Today",
+    "description": "Experience the AI-powered solution proven in Gunpo City and Seodaemun District.",
+    "cta": "Start Free Trial",
     "benefits": {
       "freeAccess": {
-        "title": "Benefit A",
-        "description": "Short description of this benefit."
+        "title": "4-Week Free Pilot",
+        "description": "See the impact directly in your real work environment."
       },
       "limitedSpots": {
-        "title": "Benefit B",
-        "description": "Short description of this benefit."
+        "title": "Dedicated Support Team",
+        "description": "Expert assistance from implementation to stabilization."
       },
       "earlyAdopter": {
-        "title": "Benefit C",
-        "description": "Short description of this benefit."
+        "title": "50% Workload Reduction",
+        "description": "Cut phone and text notifications workload in half immediately."
       }
     }
   },
   "metadata": {
-    "title": "ProductName | AI Product Manager",
-    "description": "AI PM for systematic vibe coding"
+    "title": "CivicAid | AI-Powered Civil Complaint Solution",
+    "description": "Smart solution that reduces complaint processing time by 30% with AI auto-classification and response generation"
   }
 }
