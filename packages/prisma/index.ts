@@ -3,6 +3,17 @@ import { PrismaClient } from "./generated/prisma";
 
 // Prisma Client 싱글톤 인스턴스
 const createExtendedPrismaClient = () => {
+  // SKIP_AUTH 모드에서는 직접 연결 URL 사용 (connection pooler 우회)
+  if (process.env.SKIP_AUTH === "true" && process.env.DIRECT_URL) {
+    return new PrismaClient({
+      datasources: {
+        db: {
+          url: process.env.DIRECT_URL,
+        },
+      },
+    });
+  }
+  
   return new PrismaClient();
 };
 

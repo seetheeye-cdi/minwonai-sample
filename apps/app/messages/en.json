@@ -18,6 +18,10 @@
       "searchPlaceholder": "Search..."
     }
   },
+  "CivicDashboard": {
+    "title": "Complaint Processing Dashboard",
+    "description": "Monitor today's complaint processing status in real-time"
+  },
   "DashboardPage": {
     "title": "Dashboard",
     "description": "Overview of your workspace metrics and recent activity.",

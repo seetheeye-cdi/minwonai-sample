@@ -16,7 +16,22 @@ export function FeatureCard({
   className,
   ...props
 }: FeatureCardPorps) {
-  const p = genRandomPattern();
+  // Use a deterministic pattern based on the title hash to avoid hydration issues
+  const p = React.useMemo(() => {
+    const hash = feature.title.split('').reduce((acc, char) => {
+      return ((acc << 5) - acc + char.charCodeAt(0)) | 0;
+    }, 0);
+    
+    const pattern: number[][] = [];
+    for (let i = 0; i < 5; i++) {
+      const seed = Math.abs(hash + i * 13);
+      pattern.push([
+        7 + (seed % 4),
+        1 + ((seed >> 2) % 6)
+      ]);
+    }
+    return pattern;
+  }, [feature.title]);
 
   return (
     <div
@@ -116,10 +131,5 @@ function GridPattern({
   );
 }
 
-function genRandomPattern(length?: number): number[][] {
-  length = length ?? 5;
-  return Array.from({ length }, () => [
-    Math.floor(Math.random() * 4) + 7, // random x between 7 and 10
-    Math.floor(Math.random() * 6) + 1, // random y between 1 and 6
-  ]);
-}
+// Removed genRandomPattern function to avoid hydration issues
+// Pattern is now generated deterministically in FeatureCard component

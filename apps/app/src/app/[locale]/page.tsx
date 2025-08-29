@@ -1,8 +1,8 @@
-import { DashboardPage } from "@/features/dashboard/DashboardPage";
+import { CivicDashboard } from "@/features/dashboard/CivicDashboard";
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
 
 export default function Page() {
-  return <DashboardPage />;
+  return <CivicDashboard />;
 }

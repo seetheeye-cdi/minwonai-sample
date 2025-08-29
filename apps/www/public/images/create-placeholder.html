@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>CivicAid 플레이스홀더 이미지 생성기</title>
+    <style>
+        body { margin: 0; padding: 20px; font-family: 'Pretendard', -apple-system, sans-serif; }
+        .canvas-container { margin-bottom: 20px; }
+        canvas { border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>CivicAid 플레이스홀더 이미지</h1>
+    
+    <!-- Preview Image -->
+    <div class="canvas-container">
+        <h2>Hero Preview (1920x1080)</h2>
+        <canvas id="preview" width="1920" height="1080"></canvas>
+    </div>
+    
+    <!-- Dashboard Preview -->
+    <div class="canvas-container">
+        <h2>Dashboard Preview (1920x1080)</h2>
+        <canvas id="dashboard" width="1920" height="1080"></canvas>
+    </div>
+
+    <script>
+        // Hero Preview
+        const previewCanvas = document.getElementById('preview');
+        const pCtx = previewCanvas.getContext('2d');
+        
+        // Background gradient
+        const pGrad = pCtx.createLinearGradient(0, 0, 1920, 1080);
+        pGrad.addColorStop(0, '#f8fafc');
+        pGrad.addColorStop(1, '#e2e8f0');
+        pCtx.fillStyle = pGrad;
+        pCtx.fillRect(0, 0, 1920, 1080);
+        
+        // Header bar
+        pCtx.fillStyle = '#ffffff';
+        pCtx.shadowColor = 'rgba(0,0,0,0.1)';
+        pCtx.shadowBlur = 10;
+        pCtx.fillRect(0, 0, 1920, 80);
+        pCtx.shadowBlur = 0;
+        
+        // Logo placeholder
+        pCtx.fillStyle = '#2C4A7A';
+        pCtx.fillRect(40, 25, 150, 30);
+        
+        // Navigation items
+        pCtx.fillStyle = '#64748b';
+        pCtx.font = '16px sans-serif';
+        pCtx.fillText('대시보드', 250, 45);
+        pCtx.fillText('민원함', 350, 45);
+        pCtx.fillText('설정', 430, 45);
+        
+        // Main content area
+        pCtx.fillStyle = '#ffffff';
+        pCtx.fillRect(40, 120, 1840, 920);
+        
+        // KPI Cards
+        const kpiColors = ['#2C4A7A', '#4E7DD4', '#1CBCB2', '#FFA726'];
+        for (let i = 0; i < 4; i++) {
+            const x = 80 + (i * 440);
+            pCtx.fillStyle = '#ffffff';
+            pCtx.strokeStyle = '#e5e7eb';
+            pCtx.lineWidth = 1;
+            pCtx.strokeRect(x, 160, 400, 120);
+            
+            pCtx.fillStyle = kpiColors[i];
+            pCtx.fillRect(x + 20, 180, 60, 60);
+            
+            pCtx.fillStyle = '#1f2937';
+            pCtx.font = 'bold 32px sans-serif';
+            pCtx.fillText(`${Math.floor(Math.random() * 100)}건`, x + 100, 220);
+            
+            pCtx.fillStyle = '#6b7280';
+            pCtx.font = '14px sans-serif';
+            pCtx.fillText('오늘 접수', x + 100, 245);
+        }
+        
+        // Inbox Table
+        pCtx.fillStyle = '#f3f4f6';
+        pCtx.fillRect(80, 320, 1760, 50);
+        
+        pCtx.fillStyle = '#4b5563';
+        pCtx.font = '14px sans-serif';
+        pCtx.fillText('번호', 100, 350);
+        pCtx.fillText('제목', 200, 350);
+        pCtx.fillText('카테고리', 600, 350);
+        pCtx.fillText('우선순위', 800, 350);
+        pCtx.fillText('담당자', 1000, 350);
+        pCtx.fillText('상태', 1200, 350);
+        
+        // Table rows
+        for (let i = 0; i < 8; i++) {
+            const y = 390 + (i * 60);
+            
+            if (i % 2 === 0) {
+                pCtx.fillStyle = '#fafafa';
+                pCtx.fillRect(80, y - 20, 1760, 60);
+            }
+            
+            pCtx.fillStyle = '#374151';
+            pCtx.font = '14px sans-serif';
+            pCtx.fillText(`#${1000 + i}`, 100, y);
+            pCtx.fillText('도로 파손 신고입니다', 200, y);
+            pCtx.fillText('도로/교통', 600, y);
+            
+            // Priority badge
+            const priority = i < 2 ? '#ef4444' : '#10b981';
+            pCtx.fillStyle = priority;
+            pCtx.fillRect(800, y - 15, 60, 25);
+            
+            pCtx.fillText('김민수', 1000, y);
+            pCtx.fillText('처리중', 1200, y);
+        }
+        
+        // Dashboard Canvas
+        const dashCanvas = document.getElementById('dashboard');
+        const dCtx = dashCanvas.getContext('2d');
+        
+        // Background
+        const dGrad = dCtx.createLinearGradient(0, 0, 1920, 1080);
+        dGrad.addColorStop(0, '#0f172a');
+        dGrad.addColorStop(1, '#1e293b');
+        dCtx.fillStyle = dGrad;
+        dCtx.fillRect(0, 0, 1920, 1080);
+        
+        // Charts placeholder
+        dCtx.strokeStyle = '#334155';
+        dCtx.lineWidth = 2;
+        
+        // Line chart
+        dCtx.strokeRect(100, 200, 800, 400);
+        dCtx.beginPath();
+        dCtx.moveTo(150, 500);
+        dCtx.lineTo(250, 450);
+        dCtx.lineTo(350, 400);
+        dCtx.lineTo(450, 300);
+        dCtx.lineTo(550, 280);
+        dCtx.lineTo(650, 250);
+        dCtx.lineTo(750, 220);
+        dCtx.strokeStyle = '#4E7DD4';
+        dCtx.lineWidth = 3;
+        dCtx.stroke();
+        
+        // Bar chart
+        dCtx.fillStyle = '#1CBCB2';
+        for (let i = 0; i < 7; i++) {
+            const height = Math.random() * 200 + 100;
+            dCtx.fillRect(1000 + (i * 100), 600 - height, 60, height);
+        }
+        
+        // Stats
+        dCtx.fillStyle = '#ffffff';
+        dCtx.font = 'bold 48px sans-serif';
+        dCtx.fillText('98%', 100, 750);
+        dCtx.font = '18px sans-serif';
+        dCtx.fillStyle = '#94a3b8';
+        dCtx.fillText('SLA 준수율', 100, 780);
+        
+        dCtx.fillStyle = '#ffffff';
+        dCtx.font = 'bold 48px sans-serif';
+        dCtx.fillText('4.7/5.0', 400, 750);
+        dCtx.font = '18px sans-serif';
+        dCtx.fillStyle = '#94a3b8';
+        dCtx.fillText('시민 만족도', 400, 780);
+        
+        dCtx.fillStyle = '#ffffff';
+        dCtx.font = 'bold 48px sans-serif';
+        dCtx.fillText('287건', 700, 750);
+        dCtx.font = '18px sans-serif';
+        dCtx.fillStyle = '#94a3b8';
+        dCtx.fillText('일일 처리량', 700, 780);
+        
+        // Download function
+        function downloadCanvas(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        // Auto download after load
+        setTimeout(() => {
+            console.log('이미지가 생성되었습니다. 브라우저에서 우클릭 > 이미지 저장을 사용하세요.');
+        }, 1000);
+    </script>
+    
+    <p>브라우저에서 각 캔버스를 우클릭하고 "이미지로 저장"을 선택하세요.</p>
+    <p>파일명:</p>
+    <ul>
+        <li>첫 번째: preview.png</li>
+        <li>두 번째: dashboard-preview.png</li>
+    </ul>
+</body>
+</html>

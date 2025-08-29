@@ -18,6 +18,10 @@
       "searchPlaceholder": "검색..."
     }
   },
+  "CivicDashboard": {
+    "title": "민원 처리 대시보드",
+    "description": "오늘의 민원 처리 현황을 실시간으로 확인하세요"
+  },
   "DashboardPage": {
     "title": "대시보드",
     "description": "워크스페이스의 핵심 지표와 최근 활동을 한눈에 확인하세요.",

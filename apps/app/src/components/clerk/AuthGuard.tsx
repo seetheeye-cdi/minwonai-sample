@@ -1,6 +1,8 @@
 "use client";
 
 import { ReactNode } from "react";
+import { useUser, RedirectToSignIn } from "@clerk/nextjs";
+import { Loader } from "lucide-react";
 import { LoadedAuthProvider } from "./LoadedAuthProvider";
 
 interface AuthGuardProps {
@@ -8,21 +10,28 @@ interface AuthGuardProps {
   fallback?: ReactNode;
 }
 
-export function AuthGuard({ children }: AuthGuardProps) {
-  // Stub: Always authenticated with mock user
-  const mockUser = {
-    id: "test_user",
-    email: "test@civicaid.com",
-    username: "testuser",
-  };
+export function AuthGuard({ children, fallback }: AuthGuardProps) {
+  const { isLoaded, isSignedIn, user } = useUser();
 
-  return <LoadedAuthProvider user={mockUser}>{children}</LoadedAuthProvider>;
+  if (!isLoaded) {
+    return fallback ?? <Skeleton />;
+  }
+
+  if (!isSignedIn) {
+    return <RedirectToSignIn />;
+  }
+
+  if (user) {
+    return <LoadedAuthProvider user={user}>{children}</LoadedAuthProvider>;
+  }
+
+  return fallback ?? <Skeleton />;
 }
 
 function Skeleton() {
   return (
     <div className="flex h-screen items-center justify-center">
-      <div className="h-8 w-8 rounded-full border-4 border-gray-300 border-t-gray-600 animate-spin" />
+      <Loader className="h-8 w-8 animate-spin text-gray-400" />
     </div>
   );
 }

@@ -1,8 +1,14 @@
 "use client";
 
 import { Header } from "@/components/layout";
-import { Hero } from "@/components/Hero";
+import { HeroEnhanced } from "@/components/HeroEnhanced";
 import { SolutionSection } from "@/components/sections/solution-section";
+import { HowItWorksSection } from "@/components/sections/how-it-works-section";
+import { WorkflowVisualSection } from "@/components/sections/workflow-visual-section";
+import { ScreenshotShowcaseSection } from "@/components/sections/screenshot-showcase-section";
+import { FeaturesShowcaseSection } from "@/components/sections/features-showcase-section";
+import { FeatureShowcaseWithImages } from "@/components/sections/feature-showcase-with-images";
+import { ComparisonStatsSection } from "@/components/sections/comparison-stats-section";
 import { TargetUsersSection } from "@/components/sections/target-users-section";
 import { RoadmapSection } from "@/components/sections/roadmap-section";
 import { PricingSection } from "@/components/sections/pricing-section";
@@ -14,10 +20,14 @@ const Index = () => {
   return (
     <>
       <Header />
-      <Hero />
+      <HeroEnhanced />
       <SolutionSection />
-      {/* <ProblemSection /> */}
-      {/* <HowItWorksSection /> */}
+      <ScreenshotShowcaseSection />
+      <FeatureShowcaseWithImages />
+      <ComparisonStatsSection />
+      <WorkflowVisualSection />
+      <HowItWorksSection />
+      <FeaturesShowcaseSection />
       <TargetUsersSection />
       <RoadmapSection />
       <PricingSection />
