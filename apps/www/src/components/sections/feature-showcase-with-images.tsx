@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Card } from "@myapp/ui/components/card";
@@ -170,26 +171,26 @@ export const FeatureShowcaseWithImages = () => {
                 </div>
                 <div className="flex-1 text-center">
                   <span className="text-xs text-muted-foreground">
-                    app.civicaid.kr/{currentFeature.title.toLowerCase().replace(/\s/g, '-')}
+                    app.civicaid.kr/{currentFeature?.title.toLowerCase().replace(/\s/g, '-') || ''}
                   </span>
                 </div>
               </div>
               
               {/* Feature screenshot or illustration */}
-              {currentFeature.image ? (
+              {currentFeature?.image ? (
                 <img 
-                  src={currentFeature.image}
-                  alt={currentFeature.title}
+                  src={currentFeature?.image}
+                  alt={currentFeature?.title || ''}
                   className="w-full h-auto"
                 />
               ) : (
                 <div className="aspect-[16/10] bg-gradient-to-br from-muted/50 to-muted/30 flex items-center justify-center">
                   <div className="text-center p-8">
-                    <div className={`w-20 h-20 rounded-full bg-gradient-to-br ${currentFeature.color} flex items-center justify-center mx-auto mb-4 text-white`}>
-                      {currentFeature.icon}
+                    <div className={`w-20 h-20 rounded-full bg-gradient-to-br ${currentFeature?.color || ''} flex items-center justify-center mx-auto mb-4 text-white`}>
+                      {currentFeature?.icon}
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      {currentFeature.title}
+                      {currentFeature?.title}
                     </p>
                   </div>
                 </div>
@@ -203,10 +204,10 @@ export const FeatureShowcaseWithImages = () => {
                   <BarChart3 className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">{currentFeature.metrics.label}</p>
-                  <p className="text-lg font-bold">{currentFeature.metrics.value}</p>
+                  <p className="text-xs text-muted-foreground">{currentFeature?.metrics.label}</p>
+                  <p className="text-lg font-bold">{currentFeature?.metrics.value}</p>
                   <Badge variant="default" className="text-xs bg-green-500">
-                    {currentFeature.metrics.change}
+                    {currentFeature?.metrics.change}
                   </Badge>
                 </div>
               </div>
@@ -217,16 +218,16 @@ export const FeatureShowcaseWithImages = () => {
           <div className="space-y-6 order-1 lg:order-2">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${currentFeature.color} flex items-center justify-center text-white`}>
-                  {currentFeature.icon}
+                <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${currentFeature?.color || ''} flex items-center justify-center text-white`}>
+                  {currentFeature?.icon}
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold">{currentFeature.title}</h3>
-                  <Badge variant="outline">{currentFeature.subtitle}</Badge>
+                  <h3 className="text-2xl font-bold">{currentFeature?.title}</h3>
+                  <Badge variant="outline">{currentFeature?.subtitle}</Badge>
                 </div>
               </div>
               <p className="text-lg text-muted-foreground">
-                {currentFeature.description}
+                {currentFeature?.description}
               </p>
             </div>
 
@@ -235,7 +236,7 @@ export const FeatureShowcaseWithImages = () => {
               <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">
                 주요 이점
               </h4>
-              {currentFeature.benefits.map((benefit, index) => (
+              {currentFeature?.benefits.map((benefit, index) => (
                 <div key={index} className="flex items-start gap-3">
                   <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary/10 to-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <CheckCircle2 className="w-4 h-4 text-primary" />
@@ -250,20 +251,20 @@ export const FeatureShowcaseWithImages = () => {
               <div className="flex items-center justify-between mb-4">
                 <span className="text-sm font-semibold">성과 개선</span>
                 <Badge variant="default" className="bg-green-500">
-                  {currentFeature.metrics.change}
+                  {currentFeature?.metrics.change}
                 </Badge>
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">이전</span>
                   <span className="line-through text-muted-foreground">
-                    {currentFeature.metrics.value.split('→')[0]}
+                    {currentFeature?.metrics.value.split('→')[0]}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold">현재</span>
                   <span className="text-xl font-bold text-primary">
-                    {currentFeature.metrics.value.split('→')[1] || currentFeature.metrics.value}
+                    {currentFeature?.metrics.value.split('→')[1] || currentFeature?.metrics.value}
                   </span>
                 </div>
               </div>

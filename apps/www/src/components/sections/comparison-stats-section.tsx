@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useTranslations } from "next-intl";
 import { Card } from "@myapp/ui/components/card";
 import { Badge } from "@myapp/ui/components/badge";

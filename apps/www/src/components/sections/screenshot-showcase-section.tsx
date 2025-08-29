@@ -25,6 +25,8 @@ import {
   ChevronRight,
   ArrowRight,
   ExternalLink,
+  Sparkles,
+  Send,
 } from "lucide-react";
 
 // Screenshot components for each screen
