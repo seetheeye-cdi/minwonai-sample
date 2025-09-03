@@ -5,6 +5,6 @@ export function assert(
   arg?: string | Error
 ): asserts condition {
   if (!condition) {
-    throw arg instanceof Error ? arg : new Error(arg);
+    throw arg instanceof Error ? arg : new Error(arg ?? "Assertion failed");
   }
 }
